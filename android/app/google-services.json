@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "450923851820",
+    "project_id": "quizzin-71daf",
+    "storage_bucket": "quizzin-71daf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:450923851820:android:0094c71357d9ba6c566189",
+        "android_client_info": {
+          "package_name": "com.example.quizzin_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgZ5f9D-03IhB2R0WQhyyqIVVNXWD21p4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

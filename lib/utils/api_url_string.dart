@@ -1,0 +1,12 @@
+const String login = 'login';
+const String signUp = 'register_new';
+const String getUser = 'user';
+const String setUser = 'update_profile';
+const String leaderboard = 'get_leaderboard_data';
+const String chapterSection = 'get_quiz_section_list';
+const String chapterLevel = 'get_user_chapter_level';
+const String profilePicture = 'update_profile_image';
+const String passwordUpdate = 'change_password';
+const String languageUpdate = 'change_language';
+const String logoutApi = 'logout';
+const String deleteAccount = 'account_delete';
