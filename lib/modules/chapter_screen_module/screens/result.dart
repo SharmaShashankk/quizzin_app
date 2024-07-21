@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:quizzin_app/authentication_screen_module/widgets/button.dart';
+import 'package:quizzin_app/modules/authentication_screen_module/widgets/button.dart';
 // import 'package:quizzin_app/chapter_screen_module/screens/chapter_one.dart';
-import 'package:quizzin_app/chapter_screen_module/screens/wrong_answer.dart';
+import 'package:quizzin_app/modules/chapter_screen_module/screens/wrong_answer.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class ResultScreen extends StatefulWidget {

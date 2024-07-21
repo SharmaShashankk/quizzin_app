@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:quizzin_app/authentication_screen_module/widgets/button.dart';
+import 'package:quizzin_app/modules/authentication_screen_module/widgets/button.dart';
 // import 'package:quizzin_app/chapter_screen_module/screens/chapter_one.dart';
-import 'package:quizzin_app/chapter_screen_module/screens/result.dart';
+import 'package:quizzin_app/modules/chapter_screen_module/screens/result.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});

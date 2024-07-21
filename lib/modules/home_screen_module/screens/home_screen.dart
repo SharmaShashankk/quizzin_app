@@ -1,8 +1,8 @@
 import 'dart:developer';
 // import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:quizzin_app/chapter_screen_module/screens/choose_chapter.dart';
-import 'package:quizzin_app/profile_screen_module/screens/profile_setup.dart';
+import 'package:quizzin_app/modules/chapter_screen_module/screens/choose_chapter.dart';
+import 'package:quizzin_app/modules/profile_screen_module/screens/profile_setup.dart';
 import 'package:quizzin_app/services/dio_client_service.dart';
 import 'package:quizzin_app/utils/api_url_string.dart';
 import 'package:quizzin_app/utils/globals.dart';
@@ -31,6 +31,12 @@ class _HomeScreenState extends State<HomeScreen> {
       log('my response is ${response}');
       profileImage =
           response['result']['data']['user']['profile_picture_url'] ?? '';
+      firstName = response['result']['data']['user']['first_name'];
+      genderData = response['result']['data']['user']['gender'];
+      age = response['result']['data']['user']['age'].toString();
+      emailAddress = response['result']['data']['user']['email'];
+      mobileNumber = response['result']['data']['user']['mobile_number'];
+
       if (response['result']['data']['setupprofile_status'] == 0) {
         response['result']['data']['setupprofile_status'];
         Navigator.push(

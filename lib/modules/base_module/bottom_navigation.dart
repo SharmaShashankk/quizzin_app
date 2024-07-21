@@ -4,9 +4,9 @@ import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:quizzin_app/home_screen_module/screens/home_screen.dart';
-import 'package:quizzin_app/leaderboard_screen_module/leaderboard_screen.dart';
-import 'package:quizzin_app/profile_screen_module/screens/my_profile.dart';
+import 'package:quizzin_app/modules/home_screen_module/screens/home_screen.dart';
+import 'package:quizzin_app/modules/leaderboard_screen_module/leaderboard_screen.dart';
+import 'package:quizzin_app/modules/profile_screen_module/screens/my_profile.dart';
 
 class BottomNavigationModule extends StatefulWidget {
   const BottomNavigationModule({super.key});

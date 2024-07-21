@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:quizzin_app/base_module/bottom_navigation.dart';
-import 'package:quizzin_app/language_screen_module/screens/language_screen.dart';
+import 'package:quizzin_app/modules/base_module/bottom_navigation.dart';
+import 'package:quizzin_app/modules/language_screen_module/screens/language_screen.dart';
 import 'package:quizzin_app/utils/globals.dart';
 
 class SplashServices {

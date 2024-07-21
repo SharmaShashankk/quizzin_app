@@ -1,6 +1,11 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:quizzin_app/authentication_screen_module/widgets/button.dart';
+import 'package:quizzin_app/modules/authentication_screen_module/widgets/button.dart';
+import 'package:quizzin_app/services/dio_client_service.dart';
+import 'package:quizzin_app/utils/api_url_string.dart';
+import 'package:quizzin_app/utils/globals.dart';
+import 'package:quizzin_app/utils/utils.dart';
 // import 'package:quizzin_app/profile_screen_module/screens/my_profile.dart';
 
 class UpdateInfoScreen extends StatefulWidget {
@@ -14,16 +19,40 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
   List gender = ['male', 'female', 'other'];
   String? selectedValue = "";
 
-  @override
-  void initState() {
-    selectedValue = gender[0];
-
-    super.initState();
-  }
-
   final mobileUpdateController = TextEditingController();
   final emailController = TextEditingController();
   final ageUpdateController = TextEditingController();
+  final firstNameController = TextEditingController();
+
+  @override
+  void initState() {
+    selectedValue = gender[0];
+    mobileUpdateController.text = mobileNumber;
+    emailController.text = emailAddress;
+    ageUpdateController.text = age;
+    firstNameController.text = firstName;
+    // selectedValue = genderData;
+    super.initState();
+  }
+
+  updateInfo() async {
+    final response = await DioClientServices.instance
+        .dioPostCall(context, url: setUser, isLoading: true, bodyTag: {
+      'first_name': firstNameController.text,
+      'gender': genderData,
+      'age': ageUpdateController.text,
+      'email': emailController.text,
+      'contact_number': mobileUpdateController.text,
+    });
+    if (response != null && response['status'] == 1) {
+      log('my response is $response' as num);
+
+      Utils().toastMessage(response['result']['message'].toString());
+    } else if (response != null && response['status'] == 0) {
+      log('my response is $response' as num);
+      Utils().toastMessage(response['result']['message'].toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +106,7 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
                 height: 20,
               ),
               TextFormField(
+                controller: firstNameController,
                 cursorColor: Colors.white,
                 style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
@@ -119,15 +149,21 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
                           EdgeInsets.only(left: 20, top: 10, right: 20)),
                   value: selectedValue,
                   items: gender
-                      .map((e) => DropdownMenuItem(
-                            value: e,
-                            child: Text(
-                              e,
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ))
+                      .map(
+                        (e) => DropdownMenuItem(
+                          value: e,
+                          child: Text(
+                            e,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      )
                       .toList(),
-                  onChanged: (value) {},
+                  onChanged: (value) {
+                    setState(() {
+                      selectedValue = value as String;
+                    });
+                  },
                 ),
               ),
               const SizedBox(
@@ -221,30 +257,11 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
               ),
               RoundButton(
                 title: 'Update',
-                onTap: () {},
+                onTap: () {
+                  updateInfo();
+                  Navigator.pop(context);
+                },
               )
-              // GestureDetector(
-              //   onTap: () {
-              //     Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //           builder: (context) => const MyProfileScreen(),
-              //         ));
-              //   },
-              //   child: Container(
-              //     height: 60,
-              //     decoration: BoxDecoration(
-              //         borderRadius: BorderRadius.circular(35),
-              //         gradient: const LinearGradient(
-              //             colors: [Color(0xff876DFF), Color(0xffFB692A)])),
-              //     child: const Center(
-              //       child: Text(
-              //         'Update',
-              //         style: TextStyle(fontSize: 20, color: Colors.white),
-              //       ),
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ),

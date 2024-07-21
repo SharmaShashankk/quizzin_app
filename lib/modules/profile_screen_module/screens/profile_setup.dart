@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:quizzin_app/base_module/bottom_navigation.dart';
+import 'package:quizzin_app/modules/base_module/bottom_navigation.dart';
 import 'package:quizzin_app/services/dio_client_service.dart';
 // import 'package:quizzin_app/services/shared_preference.dart';
 import 'package:quizzin_app/utils/api_url_string.dart';

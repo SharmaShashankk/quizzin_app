@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quizzin_app/authentication_screen_module/widgets/button.dart';
+import 'package:quizzin_app/modules/authentication_screen_module/widgets/button.dart';
 
 class WrongAnswerScreen extends StatefulWidget {
   const WrongAnswerScreen({super.key});

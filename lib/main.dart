@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:quizzin_app/firebase_options.dart';
 import 'package:quizzin_app/services/shared_preference.dart';
-import 'package:quizzin_app/splash_screen_module/screens/splash_screen.dart';
+import 'package:quizzin_app/modules/splash_screen_module/screens/splash_screen.dart';
 import 'package:quizzin_app/utils/globals.dart';
 
 void main() async {

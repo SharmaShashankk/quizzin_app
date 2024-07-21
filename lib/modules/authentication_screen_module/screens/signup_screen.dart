@@ -2,9 +2,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:quizzin_app/authentication_screen_module/screens/login_screen.dart';
-import 'package:quizzin_app/authentication_screen_module/widgets/button.dart';
-import 'package:quizzin_app/profile_screen_module/screens/profile_setup.dart';
+import 'package:quizzin_app/modules/authentication_screen_module/screens/login_screen.dart';
+import 'package:quizzin_app/modules/authentication_screen_module/widgets/button.dart';
+import 'package:quizzin_app/modules/profile_screen_module/screens/profile_setup.dart';
 import 'package:quizzin_app/services/dio_client_service.dart';
 import 'package:quizzin_app/services/shared_preference.dart';
 import 'package:quizzin_app/utils/api_url_string.dart';
