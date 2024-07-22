@@ -10,15 +10,15 @@ import 'package:quizzin_app/utils/api_url_string.dart';
 import 'package:quizzin_app/utils/globals.dart';
 import 'package:quizzin_app/utils/utils.dart';
 
-class ChapterOneScreen extends StatefulWidget {
+class LevelsScreen extends StatefulWidget {
   final int chapterId;
-  const ChapterOneScreen({super.key, required this.chapterId});
+  const LevelsScreen({super.key, required this.chapterId});
 
   @override
-  State<ChapterOneScreen> createState() => _ChapterOneScreenState();
+  State<LevelsScreen> createState() => _LevelsScreenState();
 }
 
-class _ChapterOneScreenState extends State<ChapterOneScreen> {
+class _LevelsScreenState extends State<LevelsScreen> {
   List arrLevels = [];
   String title = '';
 

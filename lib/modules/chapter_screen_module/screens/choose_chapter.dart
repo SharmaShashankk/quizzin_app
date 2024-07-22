@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:quizzin_app/modules/authentication_screen_module/widgets/button.dart';
-import 'package:quizzin_app/modules/chapter_screen_module/screens/chapter_one.dart';
+import 'package:quizzin_app/modules/chapter_screen_module/screens/levels.dart';
 import 'package:quizzin_app/services/dio_client_service.dart';
 import 'package:quizzin_app/utils/api_url_string.dart';
 import 'package:quizzin_app/utils/utils.dart';
@@ -227,7 +227,7 @@ class _ChooseChapterScreenState extends State<ChooseChapterScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          ChapterOneScreen(chapterId: chapterId),
+                          LevelsScreen(chapterId: chapterId),
                     ));
               },
             ),

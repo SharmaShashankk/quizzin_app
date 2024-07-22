@@ -31,7 +31,7 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
     emailController.text = emailAddress;
     ageUpdateController.text = age;
     firstNameController.text = firstName;
-    // selectedValue = genderData;
+    selectedValue = genderData;
     super.initState();
   }
 
