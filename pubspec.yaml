@@ -52,6 +52,8 @@ dependencies:
   intl_phone_field: ^3.2.0
   image_picker: ^1.1.2
   image_pickers: ^2.0.5+2
+  percent_indicator: ^4.2.3
+  audioplayers: ^6.0.0
   
   
 
@@ -102,7 +104,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
-  #   - images/a_dot_ham.jpeg
+    - assets/audio/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
