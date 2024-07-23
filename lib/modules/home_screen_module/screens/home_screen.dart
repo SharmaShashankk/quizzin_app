@@ -31,11 +31,13 @@ class _HomeScreenState extends State<HomeScreen> {
       log('my response is ${response}');
       profileImage =
           response['result']['data']['user']['profile_picture_url'] ?? '';
-      firstName = response['result']['data']['user']['first_name'];
-      genderData = response['result']['data']['user']['gender'];
-      age = response['result']['data']['user']['age'].toString();
-      emailAddress = response['result']['data']['user']['email'];
-      mobileNumber = response['result']['data']['user']['mobile_number'];
+
+      firstName = response['result']['data']['user']['first_name'] ?? '';
+      print('firstName: $firstName');
+      genderData = response['result']['data']['user']['gender'] ?? '';
+      age = response['result']['data']['user']['age'].toString() ?? '';
+      emailAddress = response['result']['data']['user']['email'] ?? '';
+      mobileNumber = response['result']['data']['user']['mobile_number'] ?? '';
 
       if (response['result']['data']['setupprofile_status'] == 0) {
         response['result']['data']['setupprofile_status'];
