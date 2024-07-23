@@ -1,7 +1,19 @@
+import 'dart:async';
+import 'dart:developer';
+
+import 'package:audioplayers/audioplayers.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:quizzin_app/modules/authentication_screen_module/widgets/button.dart';
+import 'package:quizzin_app/modules/chapter_screen_module/screens/choose_chapter.dart';
+import 'package:quizzin_app/modules/chapter_screen_module/screens/levels.dart';
 // import 'package:quizzin_app/chapter_screen_module/screens/chapter_one.dart';
 import 'package:quizzin_app/modules/chapter_screen_module/screens/result.dart';
+import 'package:quizzin_app/services/dio_client_service.dart';
+import 'package:quizzin_app/utils/api_url_string.dart';
+import 'package:quizzin_app/utils/globals.dart';
+import 'package:quizzin_app/utils/utils.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -14,32 +26,103 @@ class _QuizScreenState extends State<QuizScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   double _currentTime = 0;
-  bool isMuted = false;
+  // bool isMuted = false;
 
-  void toggleMute() {
-    setState(() {
-      isMuted = !isMuted;
-    });
-  }
+  // void toggleMute() {
+  //   setState(() {
+  //     isMuted = !isMuted;
+  //   });
+  // }
 
   @override
   void initState() {
+    _startTimer();
+    audioPlayer = AudioPlayer();
+    _playMusic();
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 60),
+      duration: Duration(seconds: 59),
     )..repeat();
 
     _controller.addListener(() {
       setState(() {
-        _currentTime = _controller.value * 60;
+        _currentTime = _controller.value * 59;
       });
     });
+  }
+
+  double _percent = 1.0;
+  int _timeInSeconds = 59;
+  late Timer _timer;
+
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_timeInSeconds > 0) {
+          _timeInSeconds--;
+          _percent = _timeInSeconds / 59;
+        } else {
+          _timeInSeconds = 59;
+          _percent = 1.0;
+          _timer.cancel();
+          _startTimer();
+        }
+      });
+    });
+  }
+
+  late AudioPlayer audioPlayer;
+  bool _isPlaying = true;
+
+  void _playMusic() async {
+    await audioPlayer.setReleaseMode(ReleaseMode.loop);
+    await audioPlayer.play(AssetSource('audio/ramayan.mp3'));
+  }
+
+  void _toggleMusic() {
+    setState(() {
+      if (_isPlaying) {
+        audioPlayer.pause();
+      } else {
+        audioPlayer.resume();
+      }
+      _isPlaying = !_isPlaying;
+    });
+  }
+
+  List arrQues = [];
+  questionsData() async {
+    print(token);
+    final response = await DioClientServices.instance.dioPostCall(context,
+        url: questionBank,
+        isLoading: true,
+        bodyTag: {
+          'chapter_id': 1,
+          'difficulty_level': 'L1',
+          'question_section': 'Chapter'
+        });
+    if (response != null && response['status'] == 1) {
+      log('my response is $response');
+
+      for (int i = 0;
+          i < response['result']['chapter_levels']['levelsDetails'].length;
+          i++) {
+        arrQues.add({});
+      }
+      setState(() {});
+      print('my list is ${arrQues}');
+    } else if (response != null && response['status'] == 0) {
+      log('my response is ${response}');
+
+      Utils().toastMessage(response['result']['message'].toString());
+    }
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    audioPlayer.dispose();
     super.dispose();
   }
 
@@ -68,38 +151,39 @@ class _QuizScreenState extends State<QuizScreen>
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
-                    height: 60,
-                    width: 60,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40),
-                      border: Border.all(color: Color(0xff876DFF), width: 8),
+                  Center(
+                      child: CircularPercentIndicator(
+                    radius: 30,
+                    lineWidth: 5,
+                    percent: _percent,
+                    center: Text(
+                      "${_timeInSeconds}",
+                      style: TextStyle(fontSize: 18, color: Color(0xff876DFF)),
                     ),
-                    child: Center(
-                      child: Text(
-                        '53',
-                        style: TextStyle(
-                            color: Color(0xff876DFF),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17),
-                      ),
-                    ),
-                  ),
+                    progressColor: Color(0xff876DFF),
+                  )),
                   SizedBox(
                     width: 100,
                   ),
                   GestureDetector(
                       child: IconButton(
                           onPressed: () {
-                            toggleMute();
+                            // toggleMute();
+                            _toggleMusic();
                           },
                           icon: Icon(
-                            isMuted
-                                ? Icons.volume_up_rounded
-                                : Icons.volume_off_rounded,
-                            color: isMuted ? Colors.white : Colors.red,
-                            size: isMuted ? 50 : 50,
-                          ))),
+                            _isPlaying ? Icons.volume_up : Icons.volume_down,
+                            color: _isPlaying ? Colors.green : Colors.red,
+                            size: _isPlaying ? 50 : 50,
+                          )
+                          // Icon(
+                          //   isMuted
+                          //       ? Icons.volume_up_rounded
+                          //       : Icons.volume_off_rounded,
+                          //   color: isMuted ? Colors.white : Colors.red,
+                          //   size: isMuted ? 50 : 50,
+                          // )
+                          )),
                 ],
               ),
               Text(
@@ -233,12 +317,12 @@ class _QuizScreenState extends State<QuizScreen>
                                 RoundButton(
                                   title: 'Yes Exit Anyway',
                                   onTap: () {
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //       builder: (context) =>
-                                    //           ChapterOneScreen(),
-                                    //     ));
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ChooseChapterScreen(),
+                                        ));
                                   },
                                 ),
                                 SizedBox(
