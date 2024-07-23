@@ -1,4 +1,5 @@
-import 'dart:math';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:quizzin_app/modules/authentication_screen_module/widgets/button.dart';
@@ -27,11 +28,12 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
   @override
   void initState() {
     selectedValue = gender[0];
+    print('firstName $firstName ');
     mobileUpdateController.text = mobileNumber;
     emailController.text = emailAddress;
     ageUpdateController.text = age;
     firstNameController.text = firstName;
-    selectedValue = genderData;
+    // selectedValue = genderData;
     super.initState();
   }
 
@@ -39,17 +41,25 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
     final response = await DioClientServices.instance
         .dioPostCall(context, url: setUser, isLoading: true, bodyTag: {
       'first_name': firstNameController.text,
-      'gender': genderData,
-      'age': ageUpdateController.text,
+      'last_name': 'Sharma',
+      'country_code': 91,
+      'language_code': 'en',
+      'gender': selectedValue,
+      'age': int.parse(ageUpdateController.text),
       'email': emailController.text,
       'contact_number': mobileUpdateController.text,
     });
     if (response != null && response['status'] == 1) {
-      log('my response is $response' as num);
+      log('my response is $response');
+      firstName = response['result']['data']['user']['first_name'];
+      gender = response['result']['data']['user']['gender'];
+      age = response['result']['data']['user']['age'];
+      emailAddress = response['result']['data']['user']['email'];
+      mobileNumber = response['result']['data']['user']['mobile_number'];
 
       Utils().toastMessage(response['result']['message'].toString());
     } else if (response != null && response['status'] == 0) {
-      log('my response is $response' as num);
+      log('my response is $response');
       Utils().toastMessage(response['result']['message'].toString());
     }
   }
