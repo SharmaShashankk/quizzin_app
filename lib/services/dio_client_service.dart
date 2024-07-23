@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:quizzin_app/utils/base_url.dart';
 import 'package:quizzin_app/utils/globals.dart';
 
-
 class DioClientServices {
   DioClientServices._();
   static final DioClientServices instance = DioClientServices._();
@@ -24,7 +23,7 @@ class DioClientServices {
     required dynamic bodyTag,
     required String url,
     required bool? isLoading,
-    bool isImageUpload =  false,
+    bool isImageUpload = false,
   }) async {
     try {
       isLoading = true;
@@ -88,6 +87,7 @@ class DioClientServices {
                   }
                 : null),
       );
+      print(token);
       return response.data;
     } on DioError catch (e) {
       log("${e.response?.statusCode}", name: "Exception response null");
