@@ -10,3 +10,4 @@ const String passwordUpdate = 'change_password';
 const String languageUpdate = 'change_language';
 const String logoutApi = 'logout';
 const String deleteAccount = 'account_delete';
+const String questionBank = 'get_question';
