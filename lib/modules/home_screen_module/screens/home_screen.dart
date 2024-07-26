@@ -1,5 +1,4 @@
 import 'dart:developer';
-// import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:quizzin_app/modules/chapter_screen_module/screens/choose_chapter.dart';
 import 'package:quizzin_app/modules/profile_screen_module/screens/profile_setup.dart';
@@ -35,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
       firstName = response['result']['data']['user']['first_name'] ?? '';
       print('firstName: $firstName');
       genderData = response['result']['data']['user']['gender'] ?? '';
-      age = response['result']['data']['user']['age'].toString() ?? '';
+      age = response['result']['data']['user']['age'].toString();
       emailAddress = response['result']['data']['user']['email'] ?? '';
       mobileNumber = response['result']['data']['user']['mobile_number'] ?? '';
 
