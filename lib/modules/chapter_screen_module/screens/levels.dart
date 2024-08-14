@@ -193,11 +193,17 @@ class _LevelsScreenState extends State<LevelsScreen> {
                                               RoundButton(
                                                 title: 'Okay, Start',
                                                 onTap: () {
+                                                  Navigator.pop(context);
+
                                                   Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
                                                         builder: (context) =>
-                                                            QuizScreen(),
+                                                            QuizScreen(
+                                                              chapterId: widget.chapterId,
+                                                          level:
+                                                              'L${index + 1}',
+                                                        ),
                                                       ));
                                                 },
                                               ),
