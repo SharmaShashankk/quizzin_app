@@ -54,6 +54,12 @@ dependencies:
   image_pickers: ^2.0.5+2
   percent_indicator: ^4.2.3
   audioplayers: ^6.0.0
+  share_plus: ^2.1.4
+  url_launcher: ^6.3.0
+  screenshot: ^3.0.0
+  path_provider: ^2.1.4
+  image_gallery_saver: ^2.0.3
+  permission_handler: ^11.3.1
   
   
 
