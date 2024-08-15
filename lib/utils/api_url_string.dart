@@ -11,3 +11,4 @@ const String languageUpdate = 'change_language';
 const String logoutApi = 'logout';
 const String deleteAccount = 'account_delete';
 const String questionBank = 'get_question';
+const String levelResult = 'update_result';
