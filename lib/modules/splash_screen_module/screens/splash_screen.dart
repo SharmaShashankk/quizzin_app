@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:quizzin_app/services/splash_services.dart';
 
@@ -14,11 +13,8 @@ class _SplashScreen2State extends State<SplashScreen> {
 
   @override
   void initState() {
-    
     super.initState();
     _splashServices.isLogin(context);
-    
-
   }
 
   @override
