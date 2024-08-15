@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:quizzin_app/modules/authentication_screen_module/widgets/button.dart';
 
@@ -9,6 +10,8 @@ class WrongAnswerScreen extends StatefulWidget {
 }
 
 class _WrongAnswerScreenState extends State<WrongAnswerScreen> {
+  final int maxLength = 100;
+  TextEditingController controller = TextEditingController();
   List arrList = [
     {
       'number': '1',
@@ -18,7 +21,7 @@ class _WrongAnswerScreenState extends State<WrongAnswerScreen> {
       'right answer': 'Right Answer:',
       'answer1': '16 Years',
       'answer2': '18 Years',
-      'trail': 'Report the Question'
+      'trail': 'Report This Question'
     },
     {
       'number': '1',
@@ -28,7 +31,7 @@ class _WrongAnswerScreenState extends State<WrongAnswerScreen> {
       'right answer': 'Right Answer:',
       'answer1': '16 Years',
       'answer2': '18 Years',
-      'trail': 'Report the Question'
+      'trail': 'Report This Question'
     },
     {
       'number': '1',
@@ -38,7 +41,7 @@ class _WrongAnswerScreenState extends State<WrongAnswerScreen> {
       'right answer': 'Right Answer:',
       'answer1': '16 Years',
       'answer2': '18 Years',
-      'trail': 'Report the Question'
+      'trail': 'Report This Question'
     },
     {
       'number': '1',
@@ -48,7 +51,7 @@ class _WrongAnswerScreenState extends State<WrongAnswerScreen> {
       'right answer': 'Right Answer:',
       'answer1': '16 Years',
       'answer2': '18 Years',
-      'trail': 'Report the Question'
+      'trail': 'Report This Question'
     },
     {
       'number': '1',
@@ -58,7 +61,7 @@ class _WrongAnswerScreenState extends State<WrongAnswerScreen> {
       'right answer': 'Right Answer:',
       'answer1': '16 Years',
       'answer2': '18 Years',
-      'trail': 'Report the Question'
+      'trail': 'Report This Question'
     },
     {
       'number': '1',
@@ -68,7 +71,7 @@ class _WrongAnswerScreenState extends State<WrongAnswerScreen> {
       'right answer': 'Right Answer:',
       'answer1': '16 Years',
       'answer2': '18 Years',
-      'trail': 'Report the Question'
+      'trail': 'Report This Question'
     },
     {
       'number': '1',
@@ -78,7 +81,7 @@ class _WrongAnswerScreenState extends State<WrongAnswerScreen> {
       'right answer': 'Right Answer:',
       'answer1': '16 Years',
       'answer2': '18 Years',
-      'trail': 'Report the Question'
+      'trail': 'Report This Question'
     },
     {
       'number': '1',
@@ -88,14 +91,14 @@ class _WrongAnswerScreenState extends State<WrongAnswerScreen> {
       'right answer': 'Right Answer:',
       'answer1': '16 Years',
       'answer2': '18 Years',
-      'trail': 'Report the Question'
+      'trail': 'Report This Question'
     },
   ];
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color(0xff181632),
+        backgroundColor: const Color(0xff181632),
         body: Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: Column(
@@ -110,7 +113,7 @@ class _WrongAnswerScreenState extends State<WrongAnswerScreen> {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: CircleAvatar(
+                      child: const CircleAvatar(
                         backgroundColor: Color(0xff232149),
                         child: Icon(
                           Icons.arrow_back,
@@ -118,14 +121,14 @@ class _WrongAnswerScreenState extends State<WrongAnswerScreen> {
                         ),
                       ),
                     ),
-                    Text(
+                    const Text(
                       'Wrong Answers',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 23,
                           fontWeight: FontWeight.bold),
                     ),
-                    Text(
+                    const Text(
                       '3 out of 12',
                       style: TextStyle(color: Colors.red, fontSize: 17),
                     ),
@@ -140,7 +143,7 @@ class _WrongAnswerScreenState extends State<WrongAnswerScreen> {
                     child: Column(
                       children: [
                         ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: arrList.length,
                           itemBuilder: (context, index) {
@@ -149,7 +152,7 @@ class _WrongAnswerScreenState extends State<WrongAnswerScreen> {
                                   borderRadius: BorderRadius.circular(35)),
                               child: Card(
                                 child: ListTile(
-                                  tileColor: Color(0xff232149),
+                                  tileColor: const Color(0xff232149),
                                   title: Row(
                                     children: [
                                       Container(
@@ -162,10 +165,11 @@ class _WrongAnswerScreenState extends State<WrongAnswerScreen> {
                                         child: Center(
                                             child: Text(
                                           arrList[index]['number'],
-                                          style: TextStyle(color: Colors.white),
+                                          style: const TextStyle(
+                                              color: Colors.white),
                                         )),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 10,
                                       ),
                                       Column(
@@ -174,19 +178,19 @@ class _WrongAnswerScreenState extends State<WrongAnswerScreen> {
                                         children: [
                                           Text(
                                             arrList[index]['title'],
-                                            style:
-                                                TextStyle(color: Colors.grey),
+                                            style: const TextStyle(
+                                                color: Colors.grey),
                                           ),
                                           Text(
                                             arrList[index]['title2'],
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 14),
                                           )
                                         ],
                                       ),
-                                      Spacer(),
-                                      Icon(
+                                      const Spacer(),
+                                      const Icon(
                                         Icons.keyboard_arrow_up,
                                         color: Color(0xff876DFF),
                                       ),
@@ -194,57 +198,174 @@ class _WrongAnswerScreenState extends State<WrongAnswerScreen> {
                                   ),
                                   subtitle: Column(
                                     children: [
-                                      Divider(),
-                                      SizedBox(
+                                      const Divider(),
+                                      const SizedBox(
                                         height: 5,
                                       ),
                                       Row(
                                         children: [
                                           Text(
                                             arrList[index]['your answer'],
-                                            style:
-                                                TextStyle(color: Colors.grey),
+                                            style: const TextStyle(
+                                                color: Colors.grey),
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             width: 5,
                                           ),
                                           Text(
                                             arrList[index]['answer1'],
-                                            style: TextStyle(color: Colors.red),
+                                            style: const TextStyle(
+                                                color: Colors.red),
                                           )
                                         ],
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 5,
                                       ),
                                       Row(
                                         children: [
                                           Text(
                                             arrList[index]['right answer'],
-                                            style:
-                                                TextStyle(color: Colors.grey),
+                                            style: const TextStyle(
+                                                color: Colors.grey),
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             width: 5,
                                           ),
                                           Text(
                                             arrList[index]['answer2'],
-                                            style:
-                                                TextStyle(color: Colors.green),
+                                            style: const TextStyle(
+                                                color: Colors.green),
                                           )
                                         ],
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 5,
                                       ),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.end,
                                         children: [
-                                          Text(
-                                            arrList[index]['trail'],
-                                            style:
-                                                TextStyle(color: Colors.grey),
+                                          GestureDetector(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    contentPadding:
+                                                        EdgeInsets.zero,
+                                                    content: Container(
+                                                      height: 440,
+                                                      width: 200,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                          color: Color(
+                                                              0xff232149)),
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                left: 10,
+                                                                right: 10,
+                                                                top: 10,
+                                                                bottom: 10),
+                                                        child: Column(
+                                                          children: [
+                                                            Text(
+                                                              'Report This Question',
+                                                              style: TextStyle(
+                                                                  fontSize: 20,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: Colors
+                                                                      .orange
+                                                                      .shade900),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 15,
+                                                            ),
+                                                            Text(
+                                                              'How old was SIta when she married Lord Ram?',
+                                                              style: TextStyle(
+                                                                  fontSize: 17,
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 15,
+                                                            ),
+                                                            TextFormField(
+                                                              keyboardType:
+                                                                  TextInputType
+                                                                      .text,
+                                                              cursorColor:
+                                                                  Colors.white,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white),
+                                                              controller:
+                                                                  controller,
+                                                              minLines: 4,
+                                                              maxLines: 7,
+                                                              maxLength:
+                                                                  maxLength,
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                hintText:
+                                                                    'Enter Your Feedback',
+                                                                hintStyle: TextStyle(
+                                                                    color: Color(
+                                                                        0xff876DFF)),
+                                                                border:
+                                                                    OutlineInputBorder(),
+                                                                filled: true,
+                                                                fillColor: Color(
+                                                                    0xff181632),
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 20,
+                                                            ),
+                                                            RoundButton(
+                                                              title: 'Submit',
+                                                              onTap: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                            ),
+                                                            SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            GestureDetector(
+                                                              onTap: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              child: Text(
+                                                                'Cancel',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        17),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Text(
+                                              arrList[index]['trail'],
+                                              style: const TextStyle(
+                                                  color: Colors.grey),
+                                            ),
                                           )
                                         ],
                                       )
@@ -261,7 +382,7 @@ class _WrongAnswerScreenState extends State<WrongAnswerScreen> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(left: 20, right: 20),
+                padding: const EdgeInsets.only(left: 20, right: 20),
                 child: RoundButton(
                   title: 'Closed',
                   onTap: () {
