@@ -1,22 +1,34 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:quizzin_app/modules/authentication_screen_module/widgets/button.dart';
-// import 'package:quizzin_app/chapter_screen_module/screens/chapter_one.dart';
+import 'package:quizzin_app/modules/chapter_screen_module/screens/levels.dart';
 import 'package:quizzin_app/modules/chapter_screen_module/screens/wrong_answer.dart';
+import 'package:quizzin_app/modules/chapter_screen_module/widgets/result_card.dart';
+import 'package:quizzin_app/modules/chapter_screen_module/widgets/show_custom_dialog.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class ResultScreen extends StatefulWidget {
-  const ResultScreen({super.key});
+  const ResultScreen({
+    super.key,
+  });
 
   @override
   State<ResultScreen> createState() => _ResultScreenState();
 }
 
 class _ResultScreenState extends State<ResultScreen> {
+  final controller = ScreenshotController();
+
+ 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff181632),
+      backgroundColor: const Color(0xff181632),
       body: Padding(
         padding: const EdgeInsets.only(top: 70, left: 10, right: 10),
         child: Column(
@@ -25,22 +37,24 @@ class _ResultScreenState extends State<ResultScreen> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    // Navigator.pushReplacement(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) => ChapterOneScreen(),
-                    //     ));
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LevelsScreen(
+                            chapterId: 1,
+                          ),
+                        ));
                   },
-                  child: Icon(
+                  child: const Icon(
                     Icons.close,
                     size: 40,
                     color: Color(0xff876DFF),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 120,
                 ),
-                Text(
+                const Text(
                   'Result',
                   style: TextStyle(
                       color: Colors.white,
@@ -49,133 +63,134 @@ class _ResultScreenState extends State<ResultScreen> {
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            Stack(
-              children: [
-                Container(
-                  height: 555,
-                  width: 420,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('assets/images/CARD-2.png'),
-                          fit: BoxFit.cover)),
-                ),
-                Positioned(
-                  top: 10,
-                  left: 10,
-                  child: Container(
-                    height: 80,
-                    width: 55,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xff876DFF)),
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                            image: AssetImage('assets/images/Group 318.png'),
-                            fit: BoxFit.cover)),
-                  ),
-                ),
-                Positioned(
-                    top: 100,
-                    left: 10,
-                    child: Image(
-                      image: AssetImage('assets/images/#manukahat.png'),
-                      width: 60,
-                    )),
-                Positioned(
-                    top: 10,
-                    left: 165,
-                    child: CircleAvatar(
-                      radius: 35,
-                      child: Icon(Icons.person),
-                    )),
-                Positioned(
-                  top: 85,
-                  left: 160,
-                  child: Container(
-                    padding: EdgeInsets.only(left: 10),
-                    height: 40,
-                    width: 80,
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(40),
-                        border: Border.all(color: Color(0xff876DFF))),
-                    child: Row(
-                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Image(
-                          image: AssetImage('assets/images/coin 1.png'),
-                          height: 22,
-                          fit: BoxFit.cover,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          '30',
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                    top: 10,
-                    left: 335,
-                    child: Image(
-                      image: AssetImage('assets/images/Logo Icon-2.png'),
-                      height: 70,
-                      width: 70,
-                      fit: BoxFit.cover,
-                    )),
-                Positioned(
-                  top: 170,
-                  left: 130,
-                  child: Container(
-                    height: 50,
-                    width: 150,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('assets/images/Great.png'),
-                            fit: BoxFit.cover)),
-                  ),
-                ),
-                Positioned(
-                  top: 225,
-                  left: 120,
+            // resultCard(context),
+            Expanded(
+              child: Container(
+                height: 555,
+                width: 420,
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/CARD-2.png'),
+                        fit: BoxFit.cover)),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              Container(
+                                height: 80,
+                                width: 55,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: const Color(0xff876DFF)),
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: const DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/Group 318.png'),
+                                        fit: BoxFit.cover)),
+                              ),
+                              const Image(
+                                image:
+                                    AssetImage('assets/images/#manukahat.png'),
+                                fit: BoxFit.contain,
+                                width: 60,
+                              )
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              const CircleAvatar(
+                                radius: 35,
+                                child: Icon(Icons.person),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
+                                decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(40),
+                                    border: Border.all(
+                                        color: const Color(0xff876DFF))),
+                                child: const Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Image(
+                                      image: AssetImage(
+                                          'assets/images/coin 1.png'),
+                                      height: 22,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      '30',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 18),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Image(
+                            image: AssetImage('assets/images/Logo Icon-2.png'),
+                            height: 70,
+                            width: 70,
+                            fit: BoxFit.contain,
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 50,
+                      ),
+                      Container(
+                        height: 50,
+                        width: 150,
+                        decoration: const BoxDecoration(
+                            image: DecorationImage(
+                          image: AssetImage('assets/images/Great.png'),
+                          fit: BoxFit.contain,
+                        )),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text(
                         'Shashank',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(
-                        height: 1,
-                      ),
-                      Text(
+                      const Text(
                         'You earned points',
                         style: TextStyle(color: Colors.grey, fontSize: 20),
                       ),
-                      SizedBox(
-                        height: 5,
-                      ),
                       Container(
-                        height: 85,
+                        height: 80,
                         width: 140,
-                        padding: EdgeInsets.only(left: 20),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
                         decoration: BoxDecoration(
                             color: Colors.orange.shade900,
                             borderRadius: BorderRadius.circular(50)),
-                        child: Row(
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Image(
                               image: AssetImage('assets/images/coin 1.png'),
                               height: 40,
-                              fit: BoxFit.cover,
+                              width: 40,
+                              fit: BoxFit.contain,
                             ),
                             SizedBox(
                               width: 10,
@@ -190,225 +205,91 @@ class _ResultScreenState extends State<ResultScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
+                      const Text(
                         'for playing quiz of',
                         style: TextStyle(color: Colors.grey, fontSize: 18),
+                      ),
+                      const SizedBox(
+                        height: 45,
+                      ),
+                      Container(
+                        height: 70,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: const Color(0xff232149)),
+                        padding: const EdgeInsets.only(
+                            left: 10, right: 10, top: 10, bottom: 4),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Chapter 1- Ramayana',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                Text(
+                                  'Baal kand',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                              ],
+                            ),
+                            Image(
+                              image: AssetImage('assets/images/Ram.png'),
+                              height: 50,
+                              fit: BoxFit.contain,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-                Positioned(
-                  top: 425,
-                  left: 10,
-                  child: Container(
-                    height: 80,
-                    width: 395,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image:
-                                AssetImage('assets/images/Rectangle 112.png'),
-                            fit: BoxFit.cover)),
-                    child: ListTile(
-                      title: Text(
-                        'Chapter 1- Ramayana',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                      subtitle: Text(
-                        'Baal kand',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                      trailing:
-                          Image(image: AssetImage('assets/images/Ram.png')),
-                    ),
-                  ),
-                )
-              ],
+              ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 45,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
-              child: RoundButton(
-                title: 'Share Your Result',
-                onTap: () {},
+              child: GestureDetector(
+                child: RoundButton(
+                  title: 'Share Your Result',
+                  onTap: () async {
+                    final image = await controller.captureFromWidget(
+                      resultCard(context),
+                      context: context,
+                    );
+
+                    saveAndShare(image);
+                  },
+                ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
-            Text(
+            const Text(
               'Your 3 out of 20 answers were correct',
               style: TextStyle(color: Colors.white, fontSize: 18),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Row(
               children: [
                 GestureDetector(
                   onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          contentPadding: EdgeInsets.zero,
-                          content: Container(
-                            height: 830,
-                            width: 300,
-                            decoration: BoxDecoration(
-                              color: Color(0xff232149),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 15),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'Expand Your Knowledge',
-                                    style: TextStyle(
-                                      color: Colors.orange.shade900,
-                                      fontSize: 22,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Follow & Subscribe',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  Text(
-                                    '#manukahat',
-                                    style: TextStyle(
-                                      color: Colors.green.shade400,
-                                      fontSize: 22,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 55,
-                                  ),
-                                  Container(
-                                    height: 340,
-                                    width: 300,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        image: DecorationImage(
-                                            image: AssetImage(
-                                                'assets/images/Group 318.png'),
-                                            fit: BoxFit.cover)),
-                                  ),
-                                  Container(
-                                    height: 310,
-                                    width: 400,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xff876DFF),
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(90),
-                                            topRight: Radius.circular(90))),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10, right: 10),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Stack(
-                                            children: [
-                                              Image(
-                                                image: AssetImage(
-                                                    'assets/images/manu_container.png'),
-                                                height: 90,
-                                                width: 150,
-                                                fit: BoxFit.cover,
-                                              ),
-                                              Positioned(
-                                                top: 35,
-                                                left: 30,
-                                                child: Image(
-                                                  image: AssetImage(
-                                                      'assets/images/#manukahat-2.png'),
-                                                  height: 20,
-                                                  width: 90,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              SvgPicture.asset(
-                                                'assets/images/Youtube.svg',
-                                                height: 75,
-                                                width: 75,
-                                                fit: BoxFit.cover,
-                                              ),
-                                              SvgPicture.asset(
-                                                'assets/images/instagram 3.svg',
-                                                height: 75,
-                                                width: 75,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            'More than 500k Subscribers',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 17),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Container(
-                                              height: 60,
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(35),
-                                                border: Border.all(
-                                                    color: Colors.white),
-                                                color: Colors.transparent,
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  'Closed',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 22),
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    );
+                    showCustomDialog(context);
                   },
                   child: Container(
                       height: 55,
                       width: 200,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(45),
-                          border: Border.all(color: Color(0xff876DFF))),
+                          border: Border.all(color: const Color(0xff876DFF))),
                       child: Row(
                         children: [
                           Icon(
@@ -417,13 +298,19 @@ class _ResultScreenState extends State<ResultScreen> {
                             size: 30,
                           ),
                           GradientText('Expand Your Knowledge',
-                              style: TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.w600),
-                              colors: [Color(0xff876DFF), Color(0xffFB692A)]),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: const TextStyle(
+                                fontSize: 12,
+                              ),
+                              colors: const [
+                                Color(0xff876DFF),
+                                Color(0xffFB692A)
+                              ]),
                         ],
                       )),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 GestureDetector(
@@ -431,7 +318,7 @@ class _ResultScreenState extends State<ResultScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => WrongAnswerScreen(),
+                          builder: (context) => const WrongAnswerScreen(),
                         ));
                   },
                   child: Container(
@@ -439,12 +326,19 @@ class _ResultScreenState extends State<ResultScreen> {
                       width: 200,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(45),
-                          border: Border.all(color: Color(0xff876DFF))),
+                          border: Border.all(color: const Color(0xff876DFF))),
                       child: Center(
-                        child: GradientText('Check Wrong Answers',
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w600),
-                            colors: [Color(0xff876DFF), Color(0xffFB692A)]),
+                        child: GradientText(
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            'Check Wrong Answers',
+                            style: const TextStyle(
+                              fontSize: 12,
+                            ),
+                            colors: const [
+                              Color(0xff876DFF),
+                              Color(0xffFB692A)
+                            ]),
                       )),
                 ),
               ],
@@ -454,4 +348,11 @@ class _ResultScreenState extends State<ResultScreen> {
       ),
     );
   }
+}
+
+Future saveAndShare(Uint8List bytes) async {
+  final directory = await getApplicationDocumentsDirectory();
+  final image = File('${directory.path}/flutter.png');
+  image.writeAsBytesSync(bytes);
+  await Share.shareFiles([image.path]);
 }
