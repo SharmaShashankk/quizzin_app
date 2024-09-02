@@ -1,6 +1,5 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:quizzin_app/modules/authentication_screen_module/screens/login_screen.dart';
 import 'package:quizzin_app/modules/authentication_screen_module/widgets/button.dart';
@@ -197,12 +196,12 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
                                 _toggleVisibility(1);
                               },
                               child: _isField1Visible
-                                  ? Icon(
+                                  ? const Icon(
                                       Icons.visibility,
                                       size: 30,
                                       color: Color(0xff876DFF),
                                     )
-                                  : Icon(
+                                  : const Icon(
                                       Icons.visibility_off,
                                       size: 30,
                                       color: Color(0xff876DFF),
@@ -253,12 +252,12 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
                                   _toggleVisibility(2);
                                 },
                                 child: _isField2Visible
-                                    ? Icon(
+                                    ? const Icon(
                                         Icons.visibility,
                                         size: 30,
                                         color: Color(0xff876DFF),
                                       )
-                                    : Icon(
+                                    : const Icon(
                                         Icons.visibility_off,
                                         size: 30,
                                         color: Color(0xff876DFF),
