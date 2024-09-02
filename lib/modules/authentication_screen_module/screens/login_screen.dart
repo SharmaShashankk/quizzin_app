@@ -1,16 +1,19 @@
 import 'dart:developer';
-
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:quizzin_app/modules/authentication_screen_module/screens/signup_screen.dart';
 import 'package:quizzin_app/modules/authentication_screen_module/widgets/button.dart';
 import 'package:quizzin_app/modules/base_module/bottom_navigation.dart';
+import 'package:quizzin_app/modules/profile_screen_module/screens/profile_setup.dart';
 import 'package:quizzin_app/services/dio_client_service.dart';
 import 'package:quizzin_app/services/shared_preference.dart';
 import 'package:quizzin_app/utils/api_url_string.dart';
 import 'package:quizzin_app/utils/globals.dart';
 import 'package:quizzin_app/utils/utils.dart';
+
+final GoogleSignIn googleSignIn = GoogleSignIn();
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -27,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final _formkey = GlobalKey<FormState>();
 
-  // final _auth = FirebaseAuth.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   void _toggleVisibility() {
     setState(() {
@@ -55,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
           'password': passwordController.text.trim()
         });
     if (response != null && response['status'] == 1) {
-      log('my response is ${response}');
+      log('my response is $response');
       setState(() {
         loading = false;
       });
@@ -65,17 +68,114 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => BottomNavigationModule(),
+          builder: (context) => const BottomNavigationModule(),
         ),
         (route) => false,
       );
     } else if (response != null && response['status'] == 0) {
-      print('my response is ${response}');
+      log('my response is $response');
       Utils().toastMessage(response['result']['message'].toString());
 
       setState(() {
         loading = false;
       });
+    }
+  }
+
+  void forgotPassword() async {
+    if (emailController.text.isEmpty) {
+      Utils().toastMessage('Please enter your email address');
+      return;
+    }
+    setState(() {
+      loading = false;
+    });
+    final response = await DioClientServices.instance.dioPostCall(context,
+        bodyTag: {'email': emailController.text.trim()},
+        url: resetPassword,
+        headerData: false,
+        isLoading: false);
+
+    if (response != null && response['status'] == 1) {
+      Utils().toastMessage('Password reset link sent to your email');
+    } else if (response != null) {
+      Utils().toastMessage(response['result']['message'].toString());
+    } else {
+      Utils().toastMessage('Something went wrong. Please try again later.');
+    }
+    setState(() {
+      loading = false;
+    });
+  }
+
+  Future<void> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      if (googleUser != null) {
+        final GoogleSignInAuthentication googleAuth =
+            await googleUser.authentication;
+
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+
+        final UserCredential userCredential =
+            await auth.signInWithCredential(credential);
+        final User? user = userCredential.user;
+
+        if (user != null) {
+          socialMediaLogin(user);
+        }
+      }
+    } catch (e) {
+      Utils().toastMessage('Google sign-in failed: $e');
+    }
+  }
+
+  void socialMediaLogin(User? user) async {
+    setState(() {
+      loading = false;
+    });
+    final response = await DioClientServices.instance.dioPostCall(context,
+        url: socialLogin,
+        isLoading: true,
+        headerData: false,
+        bodyTag: {
+          'platform': 'gmail',
+          'smToken': user?.uid,
+          'email': user?.email,
+        });
+    if (response != null && response['status'] == 1) {
+      log('my response is $response');
+      setState(() {
+        loading = false;
+      });
+      token = response['result']['token'].toString();
+      await SharedPreference.setStringData(
+          key: 'token', value: response['result']['token'].toString());
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const BottomNavigationModule(),
+        ),
+        (route) => false,
+      );
+    } else if (response != null && response['status'] == 0) {
+      print('my response is $response');
+      Utils().toastMessage(response['result']['message'].toString());
+
+      setState(() {
+        loading = false;
+      });
+    } else if (response != null && response['status'] == 2) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProfileSetupScreen(),
+        ),
+        (route) => false,
+      );
     }
   }
 
@@ -125,21 +225,21 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 50,
               ),
-              const Text(
-                'Email Address',
-                style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
               Form(
                   key: _formkey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const Text(
+                        'Email Address',
+                        style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
                       TextFormField(
                         controller: emailController,
                         cursorColor: Colors.white,
@@ -190,12 +290,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             suffixIcon: GestureDetector(
                                 onTap: _toggleVisibility,
                                 child: _isVisible
-                                    ? Icon(
+                                    ? const Icon(
                                         Icons.visibility_off,
                                         size: 30,
                                         color: Color(0xff876DFF),
                                       )
-                                    : Icon(
+                                    : const Icon(
                                         Icons.visibility,
                                         size: 30,
                                         color: Color(0xff876DFF),
@@ -222,13 +322,18 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 35,
               ),
-              const Center(
-                child: Text(
-                  'Forgot Password?',
-                  style: TextStyle(
-                      color: Color(0xff876DFF),
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600),
+              Center(
+                child: GestureDetector(
+                  onTap: () {
+                    forgotPassword();
+                  },
+                  child: const Text(
+                    'Forgot Password?',
+                    style: TextStyle(
+                        color: Color(0xff876DFF),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600),
+                  ),
                 ),
               ),
               const SizedBox(
@@ -243,33 +348,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   }
                 },
               ),
-
-              // GestureDetector(
-              //   onTap: () {
-              //     if (_formkey.currentState!.validate()) {
-              //       login();
-              //     }
-              //     // Navigator.push(
-              //     //     context,
-              //     //     MaterialPageRoute(
-              //     //       builder: (context) => const ProfileSetupScreen(),
-              //     //     ));
-              //   },
-              //   child: Container(
-              //     height: 60,
-              //     width: 500,
-              //     decoration: BoxDecoration(
-              //         borderRadius: BorderRadius.circular(35),
-              //         gradient: const LinearGradient(
-              //             colors: [Color(0xff876DFF), Color(0xffFB692A)])),
-              //     child: const Center(
-              //       child: Text(
-              //         'Login',
-              //         style: TextStyle(color: Colors.white, fontSize: 20),
-              //       ),
-              //     ),
-              //   ),
-              // ),
               const SizedBox(
                 height: 60,
               ),
@@ -299,11 +377,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 20,
               ),
               Center(
-                child: Container(
-                  height: 65,
-                  width: 65,
-                  child: Image.asset(
-                      fit: BoxFit.cover, 'assets/images/Group 241.png'),
+                child: GestureDetector(
+                  onTap: () {
+                    signInWithGoogle();
+                  },
+                  child: Container(
+                    height: 75,
+                    width: 75,
+                    child: SvgPicture.asset('assets/images/Group 241.svg'),
+                  ),
                 ),
               ),
               const SizedBox(
@@ -322,23 +404,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
-
-
- // _auth
-      //     .signInWithEmailAndPassword(
-      //         email: emailController.text.toString(),
-      //         password: passwordController.text.toString())
-      //     .then((value) {
-      //   Utils().toastMessage(value.user!.email.toString());
-
-      //
-      //   setState(() {
-      //     loading = false;
-      //   });
-      // }).onError((error, stackTrace) {
-      //   Utils().toastMessage('User not found. Please check your email address');
-      //   setState(() {
-      //     loading = false;
-      //   });
-      // });
