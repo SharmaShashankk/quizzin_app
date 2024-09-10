@@ -12,3 +12,6 @@ const String logoutApi = 'logout';
 const String deleteAccount = 'account_delete';
 const String questionBank = 'get_question';
 const String levelResult = 'update_result';
+const String updateResult = 'update_feedBack_result';
+const String resetPassword = 'forgot_password';
+const String socialLogin = 'social_media_login';
