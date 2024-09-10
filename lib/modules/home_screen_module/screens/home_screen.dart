@@ -54,6 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // final screenWidth = MediaQuery.of(context).size.width;
+    // final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: const Color(0xff181632),
       body: SingleChildScrollView(
@@ -65,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 135,
               width: 430,
               decoration: BoxDecoration(
-                  color: Color(0xff232149),
+                  color: const Color(0xff232149),
                   borderRadius: BorderRadius.circular(10)),
               child: Row(
                 children: [
@@ -80,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         style:
                             TextStyle(color: Color(0xff807DAB), fontSize: 20)),
                     TextSpan(
-                        text: 'Hello World!',
+                        text: 'Shashank',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 25,

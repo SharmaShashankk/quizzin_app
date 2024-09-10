@@ -1,9 +1,14 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:quizzin_app/modules/authentication_screen_module/widgets/button.dart';
+import 'package:quizzin_app/services/dio_client_service.dart';
+import 'package:quizzin_app/utils/api_url_string.dart';
+import 'package:quizzin_app/utils/utils.dart';
 
 class WrongAnswerScreen extends StatefulWidget {
-  const WrongAnswerScreen({super.key});
+  final List wrongAnswers;
+
+  const WrongAnswerScreen({super.key, required this.wrongAnswers});
 
   @override
   State<WrongAnswerScreen> createState() => _WrongAnswerScreenState();
@@ -12,88 +17,46 @@ class WrongAnswerScreen extends StatefulWidget {
 class _WrongAnswerScreenState extends State<WrongAnswerScreen> {
   final int maxLength = 100;
   TextEditingController controller = TextEditingController();
-  List arrList = [
-    {
-      'number': '1',
-      'title': 'Question',
-      'title2': 'How old was Sita when she married\nLord Ram?',
-      'your answer': 'Your Answer:',
-      'right answer': 'Right Answer:',
-      'answer1': '16 Years',
-      'answer2': '18 Years',
-      'trail': 'Report This Question'
-    },
-    {
-      'number': '1',
-      'title': 'Question',
-      'title2': 'How old was Sita when she married\nLord Ram?',
-      'your answer': 'Your Answer:',
-      'right answer': 'Right Answer:',
-      'answer1': '16 Years',
-      'answer2': '18 Years',
-      'trail': 'Report This Question'
-    },
-    {
-      'number': '1',
-      'title': 'Question',
-      'title2': 'How old was Sita when she married\nLord Ram?',
-      'your answer': 'Your Answer:',
-      'right answer': 'Right Answer:',
-      'answer1': '16 Years',
-      'answer2': '18 Years',
-      'trail': 'Report This Question'
-    },
-    {
-      'number': '1',
-      'title': 'Question',
-      'title2': 'How old was Sita when she married\nLord Ram?',
-      'your answer': 'Your Answer:',
-      'right answer': 'Right Answer:',
-      'answer1': '16 Years',
-      'answer2': '18 Years',
-      'trail': 'Report This Question'
-    },
-    {
-      'number': '1',
-      'title': 'Question',
-      'title2': 'How old was Sita when she married\nLord Ram?',
-      'your answer': 'Your Answer:',
-      'right answer': 'Right Answer:',
-      'answer1': '16 Years',
-      'answer2': '18 Years',
-      'trail': 'Report This Question'
-    },
-    {
-      'number': '1',
-      'title': 'Question',
-      'title2': 'How old was Sita when she married\nLord Ram?',
-      'your answer': 'Your Answer:',
-      'right answer': 'Right Answer:',
-      'answer1': '16 Years',
-      'answer2': '18 Years',
-      'trail': 'Report This Question'
-    },
-    {
-      'number': '1',
-      'title': 'Question',
-      'title2': 'How old was Sita when she married\nLord Ram?',
-      'your answer': 'Your Answer:',
-      'right answer': 'Right Answer:',
-      'answer1': '16 Years',
-      'answer2': '18 Years',
-      'trail': 'Report This Question'
-    },
-    {
-      'number': '1',
-      'title': 'Question',
-      'title2': 'How old was Sita when she married\nLord Ram?',
-      'your answer': 'Your Answer:',
-      'right answer': 'Right Answer:',
-      'answer1': '16 Years',
-      'answer2': '18 Years',
-      'trail': 'Report This Question'
-    },
-  ];
+
+  List arrList = [];
+
+  updateFeedbackResult(int questionId, String feedback) async {
+    print("hajshhas ${questionId}  ${feedback}");
+    final response = await DioClientServices.instance.dioPostCall(
+      context,
+      url: updateResult,
+      isLoading: true,
+      bodyTag: {
+        'question_id': questionId.toString(),
+        'feedback': feedback,
+      },
+    );
+    if (response != null && response['status'] == 1) {
+      log('my response is $response');
+
+      Utils().toastMessage(response['result']['message'].toString());
+      // setState(() {
+      //   arrList = arrList.map((question) {
+      //     if (question['question_id'] == questionId) {
+      //       question['feedbackGiven'] = true;
+      //     }
+      //     return question;
+      //   }).toList();
+      // });
+    } else if (response != null && response['status'] == 0) {
+      log('my response is $response');
+
+      Utils().toastMessage(response['result']['message'].toString());
+    }
+  }
+
+  @override
+  void initState() {
+    log('Shashank${widget.wrongAnswers}');
+    arrList = widget.wrongAnswers;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -128,9 +91,9 @@ class _WrongAnswerScreenState extends State<WrongAnswerScreen> {
                           fontSize: 23,
                           fontWeight: FontWeight.bold),
                     ),
-                    const Text(
-                      '3 out of 12',
-                      style: TextStyle(color: Colors.red, fontSize: 17),
+                    Text(
+                      '${arrList.length} out of 20',
+                      style: const TextStyle(color: Colors.red, fontSize: 17),
                     ),
                   ],
                 ),
@@ -139,245 +102,225 @@ class _WrongAnswerScreenState extends State<WrongAnswerScreen> {
                 child: Padding(
                   padding:
                       const EdgeInsets.only(left: 10, right: 10, bottom: 22),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: arrList.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(35)),
-                              child: Card(
-                                child: ListTile(
-                                  tileColor: const Color(0xff232149),
-                                  title: Row(
-                                    children: [
-                                      Container(
-                                        height: 30,
-                                        width: 30,
-                                        decoration: BoxDecoration(
-                                            color: Colors.orange.shade900,
-                                            borderRadius:
-                                                BorderRadius.circular(35)),
-                                        child: Center(
-                                            child: Text(
-                                          arrList[index]['number'],
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        )),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
+                  child: ListView.builder(
+                    itemCount: arrList.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        color: Color(0xff232149),
+                        child: ExpansionTile(
+                          title: Row(
+                            children: [
+                              Container(
+                                height: 30,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                    color: Colors.orange.shade900,
+                                    borderRadius: BorderRadius.circular(35)),
+                                child: Center(
+                                    child: Text(
+                                  (index + 1).toString(),
+                                  style: const TextStyle(color: Colors.white),
+                                )),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Question',
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
                                             arrList[index]['title'],
-                                            style: const TextStyle(
-                                                color: Colors.grey),
-                                          ),
-                                          Text(
-                                            arrList[index]['title2'],
+                                            maxLines: 7,
                                             style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 14),
-                                          )
-                                        ],
-                                      ),
-                                      const Spacer(),
-                                      const Icon(
-                                        Icons.keyboard_arrow_up,
-                                        color: Color(0xff876DFF),
-                                      ),
-                                    ],
-                                  ),
-                                  subtitle: Column(
-                                    children: [
-                                      const Divider(),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            arrList[index]['your answer'],
-                                            style: const TextStyle(
-                                                color: Colors.grey),
                                           ),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            arrList[index]['answer1'],
-                                            style: const TextStyle(
-                                                color: Colors.red),
-                                          )
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            arrList[index]['right answer'],
-                                            style: const TextStyle(
-                                                color: Colors.grey),
-                                          ),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            arrList[index]['answer2'],
-                                            style: const TextStyle(
-                                                color: Colors.green),
-                                          )
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return AlertDialog(
-                                                    contentPadding:
-                                                        EdgeInsets.zero,
-                                                    content: Container(
-                                                      height: 440,
-                                                      width: 200,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                          color: Color(
-                                                              0xff232149)),
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 10,
-                                                                right: 10,
-                                                                top: 10,
-                                                                bottom: 10),
-                                                        child: Column(
-                                                          children: [
-                                                            Text(
-                                                              'Report This Question',
-                                                              style: TextStyle(
-                                                                  fontSize: 20,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  color: Colors
-                                                                      .orange
-                                                                      .shade900),
-                                                            ),
-                                                            SizedBox(
-                                                              height: 15,
-                                                            ),
-                                                            Text(
-                                                              'How old was SIta when she married Lord Ram?',
-                                                              style: TextStyle(
-                                                                  fontSize: 17,
-                                                                  color: Colors
-                                                                      .white),
-                                                            ),
-                                                            SizedBox(
-                                                              height: 15,
-                                                            ),
-                                                            TextFormField(
-                                                              keyboardType:
-                                                                  TextInputType
-                                                                      .text,
-                                                              cursorColor:
-                                                                  Colors.white,
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white),
-                                                              controller:
-                                                                  controller,
-                                                              minLines: 4,
-                                                              maxLines: 7,
-                                                              maxLength:
-                                                                  maxLength,
-                                                              decoration:
-                                                                  InputDecoration(
-                                                                hintText:
-                                                                    'Enter Your Feedback',
-                                                                hintStyle: TextStyle(
-                                                                    color: Color(
-                                                                        0xff876DFF)),
-                                                                border:
-                                                                    OutlineInputBorder(),
-                                                                filled: true,
-                                                                fillColor: Color(
-                                                                    0xff181632),
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                              height: 20,
-                                                            ),
-                                                            RoundButton(
-                                                              title: 'Submit',
-                                                              onTap: () {
-                                                                Navigator.pop(
-                                                                    context);
-                                                              },
-                                                            ),
-                                                            SizedBox(
-                                                              height: 10,
-                                                            ),
-                                                            GestureDetector(
-                                                              onTap: () {
-                                                                Navigator.pop(
-                                                                    context);
-                                                              },
-                                                              child: Text(
-                                                                'Cancel',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        17),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                              );
-                                            },
-                                            child: Text(
-                                              arrList[index]['trail'],
-                                              style: const TextStyle(
-                                                  color: Colors.grey),
-                                            ),
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
                                 ),
                               ),
-                            );
-                          },
-                        )
-                      ],
-                    ),
+                            ],
+                          ),
+                          subtitle: Column(
+                            children: [
+                              const Divider(),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                children: [
+                                  const Text(
+                                    'Your Answer',
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      arrList[index]['userAnswer'],
+                                      style: const TextStyle(color: Colors.red),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                children: [
+                                  const Text(
+                                    'Right Answer',
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      arrList[index]['correctAnswer'],
+                                      style:
+                                          const TextStyle(color: Colors.green),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            contentPadding: EdgeInsets.zero,
+                                            content: Container(
+                                              height: 490,
+                                              width: 200,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color:
+                                                      const Color(0xff232149)),
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10,
+                                                    right: 10,
+                                                    top: 10,
+                                                    bottom: 10),
+                                                child: Column(
+                                                  children: [
+                                                    Text(
+                                                      'Report This Question',
+                                                      style: TextStyle(
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors
+                                                              .orange.shade900),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    Text(
+                                                      arrList[index]['title'],
+                                                      style: const TextStyle(
+                                                          fontSize: 17,
+                                                          color: Colors.white),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    TextFormField(
+                                                      keyboardType:
+                                                          TextInputType.text,
+                                                      cursorColor: Colors.white,
+                                                      style: const TextStyle(
+                                                          color: Colors.white),
+                                                      controller: controller,
+                                                      minLines: 4,
+                                                      maxLines: 7,
+                                                      maxLength: maxLength,
+                                                      decoration:
+                                                          const InputDecoration(
+                                                        hintText:
+                                                            'Enter Your Feedback',
+                                                        hintStyle: TextStyle(
+                                                            color: Color(
+                                                                0xff876DFF)),
+                                                        border:
+                                                            OutlineInputBorder(),
+                                                        filled: true,
+                                                        fillColor:
+                                                            Color(0xff181632),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    RoundButton(
+                                                      title: 'Submit',
+                                                      onTap: () async {
+                                                        int questionId =
+                                                            arrList[index]
+                                                                ['question_id'];
+                                                        String feedback =
+                                                            controller.text;
+                                                        await updateFeedbackResult(
+                                                            questionId,
+                                                            feedback);
+                                                        controller.clear();
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: const Text(
+                                                        'Cancel',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 17),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: const Text(
+                                      'Report This Question',
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),

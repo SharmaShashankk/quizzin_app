@@ -12,9 +12,15 @@ import 'package:share_plus/share_plus.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
 class ResultScreen extends StatefulWidget {
-  const ResultScreen({
-    super.key,
-  });
+  final int score;
+  final int totalScore;
+  final List wrongAnswer;
+
+  const ResultScreen(
+      {super.key,
+      required this.score,
+      required this.totalScore,
+      required this.wrongAnswer});
 
   @override
   State<ResultScreen> createState() => _ResultScreenState();
@@ -22,8 +28,6 @@ class ResultScreen extends StatefulWidget {
 
 class _ResultScreenState extends State<ResultScreen> {
   final controller = ScreenshotController();
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +41,21 @@ class _ResultScreenState extends State<ResultScreen> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LevelsScreen(
-                            chapterId: 1,
-                          ),
-                        ));
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LevelsScreen(chapterId: 1),
+                      ),
+                      (route) => false,
+                    );
+                    // Navigator.pushAndRemoveUntil(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => const LevelsScreen(
+                    //         chapterId: 1,
+
+                    //       ),
+                    // ));
                   },
                   child: const Icon(
                     Icons.close,
@@ -67,185 +79,183 @@ class _ResultScreenState extends State<ResultScreen> {
               height: 20,
             ),
             // resultCard(context),
-            Expanded(
-              child: Container(
-                height: 555,
-                width: 420,
-                decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('assets/images/CARD-2.png'),
-                        fit: BoxFit.cover)),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
+            Container(
+              height: 555,
+              width: 420,
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/images/CARD-2.png'),
+                      fit: BoxFit.cover)),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10, right: 10, left: 10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          children: [
+                            Container(
+                              height: 80,
+                              width: 55,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color(0xff876DFF)),
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: const DecorationImage(
+                                      image: AssetImage(
+                                          'assets/images/Group 318.png'),
+                                      fit: BoxFit.cover)),
+                            ),
+                            const Image(
+                              image: AssetImage('assets/images/#manukahat.png'),
+                              fit: BoxFit.contain,
+                              width: 60,
+                            )
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            const CircleAvatar(
+                              radius: 35,
+                              child: Icon(Icons.person),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(40),
+                                  border: Border.all(
+                                      color: const Color(0xff876DFF))),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Image(
+                                    image:
+                                        AssetImage('assets/images/coin 1.png'),
+                                    height: 22,
+                                    fit: BoxFit.contain,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    widget.totalScore.toString(),
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Image(
+                          image: AssetImage('assets/images/Logo Icon-2.png'),
+                          height: 70,
+                          width: 70,
+                          fit: BoxFit.contain,
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 50,
+                    ),
+                    Container(
+                      height: 50,
+                      width: 150,
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                        image: AssetImage('assets/images/Great.png'),
+                        fit: BoxFit.contain,
+                      )),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text(
+                      'Shashank',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    const Text(
+                      'You earned points',
+                      style: TextStyle(color: Colors.grey, fontSize: 20),
+                    ),
+                    Container(
+                      height: 80,
+                      width: 140,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                          color: Colors.orange.shade900,
+                          borderRadius: BorderRadius.circular(50)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image(
+                            image: AssetImage('assets/images/coin 1.png'),
+                            height: 40,
+                            width: 40,
+                            fit: BoxFit.contain,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            widget.score.toString(),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Text(
+                      'for playing quiz of',
+                      style: TextStyle(color: Colors.grey, fontSize: 18),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      height: 82,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: const Color(0xff232149)),
+                      padding: const EdgeInsets.only(
+                          left: 10, right: 10, top: 10, bottom: 4),
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                height: 80,
-                                width: 55,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: const Color(0xff876DFF)),
-                                    borderRadius: BorderRadius.circular(10),
-                                    image: const DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/Group 318.png'),
-                                        fit: BoxFit.cover)),
+                              Text(
+                                'Chapter 1- Ramayana',
+                                style: TextStyle(color: Colors.grey),
                               ),
-                              const Image(
-                                image:
-                                    AssetImage('assets/images/#manukahat.png'),
-                                fit: BoxFit.contain,
-                                width: 60,
-                              )
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              const CircleAvatar(
-                                radius: 35,
-                                child: Icon(Icons.person),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 4),
-                                decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.circular(40),
-                                    border: Border.all(
-                                        color: const Color(0xff876DFF))),
-                                child: const Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Image(
-                                      image: AssetImage(
-                                          'assets/images/coin 1.png'),
-                                      height: 22,
-                                      fit: BoxFit.contain,
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      '30',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 18),
-                                    )
-                                  ],
-                                ),
+                              Text(
+                                'Baal kand',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
                               ),
                             ],
                           ),
-                          const Image(
-                            image: AssetImage('assets/images/Logo Icon-2.png'),
-                            height: 70,
-                            width: 70,
+                          Image(
+                            image: AssetImage('assets/images/Ram.png'),
+                            height: 50,
                             fit: BoxFit.contain,
-                          )
+                          ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 50,
-                      ),
-                      Container(
-                        height: 50,
-                        width: 150,
-                        decoration: const BoxDecoration(
-                            image: DecorationImage(
-                          image: AssetImage('assets/images/Great.png'),
-                          fit: BoxFit.contain,
-                        )),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Text(
-                        'Shashank',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      const Text(
-                        'You earned points',
-                        style: TextStyle(color: Colors.grey, fontSize: 20),
-                      ),
-                      Container(
-                        height: 80,
-                        width: 140,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                            color: Colors.orange.shade900,
-                            borderRadius: BorderRadius.circular(50)),
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Image(
-                              image: AssetImage('assets/images/coin 1.png'),
-                              height: 40,
-                              width: 40,
-                              fit: BoxFit.contain,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              '30',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Text(
-                        'for playing quiz of',
-                        style: TextStyle(color: Colors.grey, fontSize: 18),
-                      ),
-                      const SizedBox(
-                        height: 45,
-                      ),
-                      Container(
-                        height: 70,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: const Color(0xff232149)),
-                        padding: const EdgeInsets.only(
-                            left: 10, right: 10, top: 10, bottom: 4),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Chapter 1- Ramayana',
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                                Text(
-                                  'Baal kand',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20),
-                                ),
-                              ],
-                            ),
-                            Image(
-                              image: AssetImage('assets/images/Ram.png'),
-                              height: 50,
-                              fit: BoxFit.contain,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -259,7 +269,7 @@ class _ResultScreenState extends State<ResultScreen> {
                   title: 'Share Your Result',
                   onTap: () async {
                     final image = await controller.captureFromWidget(
-                      resultCard(context),
+                      resultCard(context, widget.score, widget.totalScore),
                       context: context,
                     );
 
@@ -271,8 +281,8 @@ class _ResultScreenState extends State<ResultScreen> {
             const SizedBox(
               height: 15,
             ),
-            const Text(
-              'Your 3 out of 20 answers were correct',
+            Text(
+              'Your ${widget.score} out of 20 answers were correct',
               style: TextStyle(color: Colors.white, fontSize: 18),
             ),
             const SizedBox(
@@ -318,7 +328,9 @@ class _ResultScreenState extends State<ResultScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const WrongAnswerScreen(),
+                          builder: (context) => WrongAnswerScreen(
+                            wrongAnswers: widget.wrongAnswer,
+                          ),
                         ));
                   },
                   child: Container(

@@ -107,14 +107,15 @@ class _LevelsScreenState extends State<LevelsScreen> {
                     children: [
                       Text(
                         'Chapter ${widget.chapterId} - Ramayana',
-                        style: TextStyle(color: Colors.grey, fontSize: 17),
+                        style:
+                            const TextStyle(color: Colors.grey, fontSize: 17),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Text(
                         title,
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 20,
                             fontWeight: FontWeight.w500),
@@ -128,7 +129,7 @@ class _LevelsScreenState extends State<LevelsScreen> {
               padding: const EdgeInsets.only(
                   left: 40, right: 30, bottom: 10, top: 30),
               child: arrLevels.isEmpty
-                  ? Center(
+                  ? const Center(
                       child: CircularProgressIndicator(),
                     )
                   : Column(
@@ -150,7 +151,7 @@ class _LevelsScreenState extends State<LevelsScreen> {
                                   context: context,
                                   builder: (context) {
                                     return AlertDialog(
-                                      backgroundColor: Color(0xff212349),
+                                      backgroundColor: const Color(0xff212349),
                                       actions: [
                                         Padding(
                                           padding: const EdgeInsets.only(
@@ -164,7 +165,7 @@ class _LevelsScreenState extends State<LevelsScreen> {
                                             children: [
                                               Image.asset(
                                                   'assets/images/Time.png'),
-                                              SizedBox(
+                                              const SizedBox(
                                                 height: 45,
                                               ),
                                               Text(
@@ -175,10 +176,10 @@ class _LevelsScreenState extends State<LevelsScreen> {
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
-                                              SizedBox(
+                                              const SizedBox(
                                                 height: 15,
                                               ),
-                                              Text(
+                                              const Text(
                                                 textAlign: TextAlign.center,
                                                 'You have to give answer of\neach question within 59\nseconds',
                                                 style: TextStyle(
@@ -187,7 +188,7 @@ class _LevelsScreenState extends State<LevelsScreen> {
                                                     fontWeight:
                                                         FontWeight.w500),
                                               ),
-                                              SizedBox(
+                                              const SizedBox(
                                                 height: 40,
                                               ),
                                               RoundButton(
@@ -200,21 +201,22 @@ class _LevelsScreenState extends State<LevelsScreen> {
                                                       MaterialPageRoute(
                                                         builder: (context) =>
                                                             QuizScreen(
-                                                              chapterId: widget.chapterId,
+                                                          chapterId:
+                                                              widget.chapterId,
                                                           level:
                                                               'L${index + 1}',
                                                         ),
                                                       ));
                                                 },
                                               ),
-                                              SizedBox(
+                                              const SizedBox(
                                                 height: 25,
                                               ),
                                               GestureDetector(
                                                 onTap: () {
                                                   Navigator.pop(context);
                                                 },
-                                                child: Text(
+                                                child: const Text(
                                                   'Cancel',
                                                   style: TextStyle(
                                                       color: Colors.grey,

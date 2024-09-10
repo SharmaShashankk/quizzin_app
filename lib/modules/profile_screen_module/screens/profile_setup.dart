@@ -1,69 +1,33 @@
-import 'dart:developer';
-
+// import 'dart:developer';
+// import 'package:quizzin_app/services/dio_client_service.dart';
+// import 'package:quizzin_app/utils/api_url_string.dart';
+// import 'package:quizzin_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:provider/provider.dart';
+import 'package:quizzin_app/models/provider.dart/profile_setup_provider.dart';
 import 'package:quizzin_app/modules/base_module/bottom_navigation.dart';
-import 'package:quizzin_app/services/dio_client_service.dart';
-// import 'package:quizzin_app/services/shared_preference.dart';
-import 'package:quizzin_app/utils/api_url_string.dart';
-import 'package:quizzin_app/utils/utils.dart';
 
 class ProfileSetupScreen extends StatefulWidget {
-  ProfileSetupScreen({super.key});
+  
+  const ProfileSetupScreen({super.key});
 
   @override
   State<ProfileSetupScreen> createState() => _ProfileSetupScreenState();
 }
 
 class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
-  bool isChecked = false;
-
-  List gender = ['male', 'female', 'other'];
-  String? selectedValue = "";
-
   @override
   void initState() {
-    selectedValue = gender[0];
+    Provider.of<ProfileSetupProvider>(context, listen: false).initializeGender;
 
     super.initState();
   }
 
-  final firstNameController = TextEditingController();
-  final lastNameController = TextEditingController();
-  // final genderController = TextEditingController();
-  final ageController = TextEditingController();
-  final emailController = TextEditingController();
-  final mobileController = TextEditingController();
-
-  setUserDetails() async {
-    final response = await DioClientServices.instance
-        .dioPostCall(context, url: setUser, isLoading: true, bodyTag: {
-      'first_name': firstNameController.text.trim(),
-      'last_name': lastNameController.text.trim(),
-      'country_code': '+91',
-      'contact_number': mobileController.text.trim(),
-      'gender': 'male',
-      'age': ageController.text.trim(),
-      'language_code': 'en',
-      'email': emailController.text.trim(),
-    });
-    if (response != null && response['status'] == 1) {
-      log('my response is ${response}');
-
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => BottomNavigationModule(),
-          ));
-    } else if (response != null && response['status'] == 0) {
-      log('my response is ${response}');
-
-      Utils().toastMessage(response['result']['message'].toString());
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final profileSetupProvider = Provider.of<ProfileSetupProvider>(context);
+    
     return Scaffold(
       backgroundColor: const Color(0xff181632),
       body: Column(
@@ -104,7 +68,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                   height: 15,
                 ),
                 TextFormField(
-                  controller: firstNameController,
+                  controller: profileSetupProvider.firstNameController,
                   cursorColor: Colors.white,
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
@@ -135,7 +99,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                   height: 15,
                 ),
                 TextFormField(
-                  controller: lastNameController,
+                  controller: profileSetupProvider.lastNameController,
                   cursorColor: Colors.white,
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
@@ -168,29 +132,27 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                 Container(
                   height: 60,
                   decoration: BoxDecoration(
-                      color: Color(0xff232149),
+                      color: const Color(0xff232149),
                       borderRadius: BorderRadius.circular(25)),
                   child: DropdownButtonFormField(
-                    
-                    dropdownColor: Color(0xff232149),
-                    icon: Icon(
+                    dropdownColor: const Color(0xff232149),
+                    icon: const Icon(
                       Icons.arrow_drop_down,
                       size: 30,
                       color: Color(0xff876DFF),
                     ),
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         border:
                             UnderlineInputBorder(borderSide: BorderSide.none),
                         contentPadding:
                             EdgeInsets.only(left: 20, top: 10, right: 20)),
-                    value: selectedValue,
-
-                    items: gender
+                    value: profileSetupProvider.selectedGender,
+                    items: profileSetupProvider.genderOptions
                         .map((e) => DropdownMenuItem(
                               value: e,
                               child: Text(
                                 e,
-                                style: TextStyle(color: Colors.white),
+                                style: const TextStyle(color: Colors.white),
                               ),
                             ))
                         .toList(),
@@ -211,7 +173,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                   height: 15,
                 ),
                 TextFormField(
-                  controller: ageController,
+                  controller: profileSetupProvider.ageController,
                   keyboardType: TextInputType.number,
                   style: const TextStyle(color: Colors.white),
                   cursorColor: Colors.white,
@@ -242,7 +204,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                   height: 15,
                 ),
                 TextFormField(
-                  controller: emailController,
+                  controller: profileSetupProvider.emailController,
                   style: const TextStyle(color: Colors.white),
                   cursorColor: Colors.white,
                   decoration: InputDecoration(
@@ -270,11 +232,11 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                 IntlPhoneField(
                   cursorColor: Colors.white,
                   disableLengthCheck: true,
-                  dropdownTextStyle: TextStyle(color: Colors.white),
-                  style: TextStyle(color: Colors.white),
-                  controller: mobileController,
+                  dropdownTextStyle: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
+                  controller: profileSetupProvider.mobileController,
                   decoration: InputDecoration(
-                      fillColor: Color(0xff232149),
+                      fillColor: const Color(0xff232149),
                       filled: true,
                       border: OutlineInputBorder(
                           borderSide: BorderSide.none,
@@ -285,25 +247,20 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                 ),
                 Row(
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isChecked = isChecked;
-                        });
+                    Consumer<ProfileSetupProvider>(
+                      builder: (context, profileSetupProvider, child) {
+                        return Checkbox(
+                          shape: BeveledRectangleBorder(
+                              side: const BorderSide(
+                                color: Colors.grey,
+                              ),
+                              borderRadius: BorderRadius.circular(0)),
+                          value: profileSetupProvider.isChecked,
+                          onChanged: (value) {
+                            profileSetupProvider.setCheckboxValue(value!);
+                          },
+                        );
                       },
-                      child: Checkbox(
-                        shape: BeveledRectangleBorder(
-                            side: const BorderSide(
-                              color: Colors.grey,
-                            ),
-                            borderRadius: BorderRadius.circular(0)),
-                        value: isChecked,
-                        onChanged: (value) {
-                          setState(() {
-                            isChecked = value!;
-                          });
-                        },
-                      ),
                     ),
                     RichText(
                         text: const TextSpan(children: [
@@ -332,8 +289,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
             padding: const EdgeInsets.only(left: 25, right: 15),
             child: GestureDetector(
               onTap: () {
-                setUserDetails();
-
+                profileSetupProvider.setUserDetails(context);
                 Navigator.push(
                     context,
                     MaterialPageRoute(

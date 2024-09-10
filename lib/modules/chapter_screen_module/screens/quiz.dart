@@ -37,6 +37,9 @@ class _QuizScreenState extends State<QuizScreen>
   int _timeInSeconds = 59;
 
   // List<QuizQuestionModel> myQuestionArr = text;
+  int correctAnswersCount = 0;
+
+  List wrongAnswers = [];
 
   @override
   void initState() {
@@ -105,9 +108,31 @@ class _QuizScreenState extends State<QuizScreen>
               : 0;
     });
 
+    if (isCorrect == 1) {
+      correctAnswersCount++;
+    } else {
+      wrongAnswers.add(
+        {
+          'question_id': arrQues[currentQuestionIndex].questionId,
+          'title': arrQues[currentQuestionIndex].text,
+          'correctAnswer':
+              getCorrectAnswer(arrQues[currentQuestionIndex]['options']),
+          'userAnswer': arrQues[currentQuestionIndex]['options'][index]['text'],
+        },
+      );
+    }
+
     Future.delayed(const Duration(seconds: 1), () {
       moveToNextQuestion();
     });
+  }
+
+  getCorrectAnswer(List optionList) {
+    for (int i = 0; i < optionList.length; i++) {
+      if (arrQues[currentQuestionIndex]['options'][i]['is_correct'] == 1) {
+        return arrQues[currentQuestionIndex]['options'][i]['text'];
+      }
+    }
   }
 
   void moveToNextQuestion() {
@@ -132,9 +157,9 @@ class _QuizScreenState extends State<QuizScreen>
       isLoading: true,
       bodyTag: {
         'difficulty_level': widget.level,
-        'earned_coin': 18,
+        'earned_coin': correctAnswersCount,
         'total_question': arrQues.length,
-        'correct_answer': 18,
+        'correct_answer': correctAnswersCount,
         'category': 'Chapter',
         'chapter_id': widget.chapterId,
         'wrong_answer_accuracy': jsonEncode([
@@ -149,7 +174,11 @@ class _QuizScreenState extends State<QuizScreen>
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const ResultScreen(),
+            builder: (context) => ResultScreen(
+              score: correctAnswersCount,
+              totalScore: response['result']['total_coin'],
+              wrongAnswer: wrongAnswers,
+            ),
           ));
 
       Utils().toastMessage(response['result']['message'].toString());
@@ -398,60 +427,3 @@ class _QuizScreenState extends State<QuizScreen>
     );
   }
 }
-
-// ListView.builder(
-              //   shrinkWrap: true,
-              //   itemCount: myQuestionArr.length,
-              //   itemBuilder: (context, index) {
-              //     return GestureDetector(
-              //       onTap: () {
-              //         if (myQuestionArr[currentQuestionIndex].isSelected ==
-              //             false) {
-              //           setState(() {
-              //             if (index ==
-              //                 myQuestionArr[currentQuestionIndex]
-              //                     .correctAnswerIndex) {
-              //               myQuestionArr[currentQuestionIndex].options[index]
-              //                   ['choose_status'] = 1;
-              //               myQuestionArr[currentQuestionIndex].isSelected =
-              //                   true;
-              //             } else {
-              //               myQuestionArr[currentQuestionIndex].options[index]
-              //                   ['choose_status'] = 2;
-              //               myQuestionArr[currentQuestionIndex].isSelected =
-              //                   true;
-              //             }
-              //           });
-              //         }
-              //       },
-              //       child: AnswerCard(
-              //         text: myQuestionArr[currentQuestionIndex].options[index]
-              //             ['option'],
-              //         chooseStatus: myQuestionArr[currentQuestionIndex]
-              //             .options[index]['choose_status'],
-              //         isSelected:
-              //             myQuestionArr[currentQuestionIndex].isSelected,
-              //       ),
-              //     );
-              //   },
-              // ),
-
-              // RoundButton(
-              //   title: 'Result Screen',
-              //   onTap: () {
-              //     // Navigator.push(
-              //     //     context,
-              //     //     MaterialPageRoute(
-              //     //       builder: (context) => ResultScreen(),
-              //     //     ));
-              //   },
-              // ),
-
-
-
-
-
-// API CALL//
-
-
-  

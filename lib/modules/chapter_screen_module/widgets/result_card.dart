@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-Widget resultCard(BuildContext context) {
+Widget resultCard(
+    BuildContext context, int score, int totalScore) {
   return Material(
     child: Container(
       width: MediaQuery.of(context).size.width,
@@ -71,7 +72,7 @@ Widget resultCard(BuildContext context) {
                           width: 4,
                         ),
                         Text(
-                          '30',
+                          totalScore.toString(),
                           style: TextStyle(color: Colors.white, fontSize: 18),
                         ),
                       ],
@@ -122,7 +123,7 @@ Widget resultCard(BuildContext context) {
               color: Colors.orange.shade900,
               borderRadius: BorderRadius.circular(50),
             ),
-            child: const Row(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Image(
@@ -134,7 +135,7 @@ Widget resultCard(BuildContext context) {
                   width: 8,
                 ),
                 Text(
-                  '30',
+                  score.toString(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 28,

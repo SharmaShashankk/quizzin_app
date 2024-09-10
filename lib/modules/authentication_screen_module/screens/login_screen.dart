@@ -1,186 +1,17 @@
-import 'dart:developer';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
+import 'package:quizzin_app/models/provider.dart/login_provider.dart';
 import 'package:quizzin_app/modules/authentication_screen_module/screens/signup_screen.dart';
 import 'package:quizzin_app/modules/authentication_screen_module/widgets/button.dart';
-import 'package:quizzin_app/modules/base_module/bottom_navigation.dart';
-import 'package:quizzin_app/modules/profile_screen_module/screens/profile_setup.dart';
-import 'package:quizzin_app/services/dio_client_service.dart';
-import 'package:quizzin_app/services/shared_preference.dart';
-import 'package:quizzin_app/utils/api_url_string.dart';
-import 'package:quizzin_app/utils/globals.dart';
-import 'package:quizzin_app/utils/utils.dart';
 
-final GoogleSignIn googleSignIn = GoogleSignIn();
-
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  bool loading = false;
-  bool _isVisible = true;
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-
-  final _formkey = GlobalKey<FormState>();
-
-  final FirebaseAuth auth = FirebaseAuth.instance;
-
-  void _toggleVisibility() {
-    setState(() {
-      _isVisible = !_isVisible;
-    });
-  }
-
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
-
-  void loginApi() async {
-    setState(() {
-      loading = true;
-    });
-    final response = await DioClientServices.instance.dioPostCall(context,
-        url: login,
-        isLoading: true,
-        headerData: false,
-        bodyTag: {
-          'email': emailController.text.trim(),
-          'password': passwordController.text.trim()
-        });
-    if (response != null && response['status'] == 1) {
-      log('my response is $response');
-      setState(() {
-        loading = false;
-      });
-      token = response['result']['token'].toString();
-      await SharedPreference.setStringData(
-          key: 'token', value: response['result']['token'].toString());
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const BottomNavigationModule(),
-        ),
-        (route) => false,
-      );
-    } else if (response != null && response['status'] == 0) {
-      log('my response is $response');
-      Utils().toastMessage(response['result']['message'].toString());
-
-      setState(() {
-        loading = false;
-      });
-    }
-  }
-
-  void forgotPassword() async {
-    if (emailController.text.isEmpty) {
-      Utils().toastMessage('Please enter your email address');
-      return;
-    }
-    setState(() {
-      loading = false;
-    });
-    final response = await DioClientServices.instance.dioPostCall(context,
-        bodyTag: {'email': emailController.text.trim()},
-        url: resetPassword,
-        headerData: false,
-        isLoading: false);
-
-    if (response != null && response['status'] == 1) {
-      Utils().toastMessage('Password reset link sent to your email');
-    } else if (response != null) {
-      Utils().toastMessage(response['result']['message'].toString());
-    } else {
-      Utils().toastMessage('Something went wrong. Please try again later.');
-    }
-    setState(() {
-      loading = false;
-    });
-  }
-
-  Future<void> signInWithGoogle() async {
-    try {
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-      if (googleUser != null) {
-        final GoogleSignInAuthentication googleAuth =
-            await googleUser.authentication;
-
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
-        );
-
-        final UserCredential userCredential =
-            await auth.signInWithCredential(credential);
-        final User? user = userCredential.user;
-
-        if (user != null) {
-          socialMediaLogin(user);
-        }
-      }
-    } catch (e) {
-      Utils().toastMessage('Google sign-in failed: $e');
-    }
-  }
-
-  void socialMediaLogin(User? user) async {
-    setState(() {
-      loading = false;
-    });
-    final response = await DioClientServices.instance.dioPostCall(context,
-        url: socialLogin,
-        isLoading: true,
-        headerData: false,
-        bodyTag: {
-          'platform': 'gmail',
-          'smToken': user?.uid,
-          'email': user?.email,
-        });
-    if (response != null && response['status'] == 1) {
-      log('my response is $response');
-      setState(() {
-        loading = false;
-      });
-      token = response['result']['token'].toString();
-      await SharedPreference.setStringData(
-          key: 'token', value: response['result']['token'].toString());
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const BottomNavigationModule(),
-        ),
-        (route) => false,
-      );
-    } else if (response != null && response['status'] == 0) {
-      print('my response is $response');
-      Utils().toastMessage(response['result']['message'].toString());
-
-      setState(() {
-        loading = false;
-      });
-    } else if (response != null && response['status'] == 2) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ProfileSetupScreen(),
-        ),
-        (route) => false,
-      );
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final loginProvider = Provider.of<LoginProvider>(context);
+
     return Scaffold(
       backgroundColor: const Color(0xff181632),
       body: Padding(
@@ -210,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const SignUp_Screen(),
+                          builder: (context) => const SignUpScreen(),
                         ),
                         (route) => false,
                       );
@@ -226,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 50,
               ),
               Form(
-                  key: _formkey,
+                  key: loginProvider.formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -241,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 15,
                       ),
                       TextFormField(
-                        controller: emailController,
+                        controller: loginProvider.emailController,
                         cursorColor: Colors.white,
                         style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
@@ -279,8 +110,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 13,
                       ),
                       TextFormField(
-                        obscureText: _isVisible,
-                        controller: passwordController,
+                        obscureText: loginProvider.isVisible,
+                        controller: loginProvider.passwordController,
                         cursorColor: Colors.white,
                         style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
@@ -288,8 +119,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 horizontal: 13, vertical: 13),
                             hintText: 'Enter Password',
                             suffixIcon: GestureDetector(
-                                onTap: _toggleVisibility,
-                                child: _isVisible
+                                onTap: loginProvider.toggleVisibility,
+                                child: loginProvider.isVisible
                                     ? const Icon(
                                         Icons.visibility_off,
                                         size: 30,
@@ -325,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Center(
                 child: GestureDetector(
                   onTap: () {
-                    forgotPassword();
+                    loginProvider.forgotPassword(context);
                   },
                   child: const Text(
                     'Forgot Password?',
@@ -340,11 +171,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 15,
               ),
               RoundButton(
-                loading: loading,
+                loading: loginProvider.loading,
                 title: 'Login',
                 onTap: () {
-                  if (_formkey.currentState!.validate()) {
-                    loginApi();
+                  if (loginProvider.formKey.currentState!.validate()) {
+                    loginProvider.loginApi(context);
                   }
                 },
               ),
@@ -379,9 +210,9 @@ class _LoginScreenState extends State<LoginScreen> {
               Center(
                 child: GestureDetector(
                   onTap: () {
-                    signInWithGoogle();
+                    loginProvider.signInWithGoogle(context);
                   },
-                  child: Container(
+                  child: SizedBox(
                     height: 75,
                     width: 75,
                     child: SvgPicture.asset('assets/images/Group 241.svg'),

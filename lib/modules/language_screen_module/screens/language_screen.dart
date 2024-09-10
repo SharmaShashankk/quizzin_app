@@ -1,12 +1,13 @@
+// import 'package:quizzin_app/modules/authentication_screen_module/screens/login_screen.dart';
+// import 'package:quizzin_app/authentication_screen_module/screens/login_screen.dart';
+// import 'package:quizzin_app/authentication_screen_module/screens/login_screen.dart';
+// import 'package:quizzin_app/utils/globals.dart';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-// import 'package:quizzin_app/authentication_screen_module/screens/login_screen.dart';
-// import 'package:quizzin_app/authentication_screen_module/screens/login_screen.dart';
+import 'package:quizzin_app/modules/authentication_screen_module/screens/login_screen.dart';
 import 'package:quizzin_app/services/dio_client_service.dart';
 import 'package:quizzin_app/utils/api_url_string.dart';
-// import 'package:quizzin_app/utils/globals.dart';
 import 'package:quizzin_app/utils/utils.dart';
 
 class LanguageScreen extends StatefulWidget {
@@ -189,6 +190,12 @@ class _LanguageScreenState extends State<LanguageScreen> {
                 child: GestureDetector(
                   onTap: () {
                     chooseLanguage();
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginScreen(),
+                        ));
                   },
                   child: Container(
                     height: 60,

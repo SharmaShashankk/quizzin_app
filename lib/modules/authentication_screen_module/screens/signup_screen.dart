@@ -1,92 +1,16 @@
-// import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quizzin_app/models/provider.dart/signup_provider.dart';
 import 'package:quizzin_app/modules/authentication_screen_module/screens/login_screen.dart';
 import 'package:quizzin_app/modules/authentication_screen_module/widgets/button.dart';
-import 'package:quizzin_app/modules/profile_screen_module/screens/profile_setup.dart';
-import 'package:quizzin_app/services/dio_client_service.dart';
-import 'package:quizzin_app/services/shared_preference.dart';
-import 'package:quizzin_app/utils/api_url_string.dart';
-import 'package:quizzin_app/utils/utils.dart';
 
-class SignUp_Screen extends StatefulWidget {
-  const SignUp_Screen({super.key});
 
-  @override
-  State<SignUp_Screen> createState() => _SignUp_ScreenState();
-}
-
-class _SignUp_ScreenState extends State<SignUp_Screen> {
-  final _formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final cnfPasswordController = TextEditingController();
-  bool loading = false;
-  bool _isField1Visible = true;
-  bool _isField2Visible = true;
-
-  void _toggleVisibility(int fieldNumber) {
-    setState(() {
-      if (fieldNumber == 1) {
-        _isField1Visible = !_isField1Visible;
-      } else if (fieldNumber == 2) {
-        _isField2Visible = !_isField2Visible;
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    cnfPasswordController.dispose();
-    super.dispose();
-  }
-
-  // FirebaseAuth _auth = FirebaseAuth.instance;
-
-  void signUpApi() async {
-    setState(() {
-      loading = true;
-    });
-    final response = await DioClientServices.instance.dioPostCall(context,
-        url: signUp,
-        isLoading: true,
-        headerData: false,
-        bodyTag: {
-          'email': emailController.text.trim(),
-          'password': passwordController.text.trim(),
-          'confirm_password': cnfPasswordController.text.trim(),
-          'user_type': 'Guest',
-        });
-    if (response != null && response['status'] == 1) {
-      log('my response is ${response}');
-      setState(() {
-        loading = false;
-      });
-
-      await SharedPreference.setStringData(
-          key: 'token', value: response['result']['token'].toString());
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ProfileSetupScreen(),
-        ),
-        (route) => false,
-      );
-    } else if (response != null && response['status'] == 0) {
-      log('my response is ${response}');
-
-      Utils().toastMessage(response['result']['message'].toString());
-
-      setState(() {
-        loading = false;
-      });
-    }
-  }
+class SignUpScreen extends StatelessWidget {
+  const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final signupProvider = Provider.of<SignupProvider>(context);
     return Scaffold(
       backgroundColor: const Color(0xff181632),
       body: Padding(
@@ -140,12 +64,12 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
                 height: 17,
               ),
               Form(
-                  key: _formKey,
+                  key:signupProvider.formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextFormField(
-                        controller: emailController,
+                        controller: signupProvider.emailController,
                         cursorColor: Colors.white,
                         style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
@@ -183,8 +107,8 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
                         height: 14,
                       ),
                       TextFormField(
-                        obscureText: !_isField1Visible,
-                        controller: passwordController,
+                        obscureText: signupProvider.isField1Visible,
+                        controller:signupProvider.passwordController,
                         cursorColor: Colors.white,
                         style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
@@ -193,9 +117,9 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
                           hintText: 'Enter Password',
                           suffixIcon: GestureDetector(
                               onTap: () {
-                                _toggleVisibility(1);
+                              signupProvider.toggleVisibility(1);
                               },
-                              child: _isField1Visible
+                              child: signupProvider.isField1Visible
                                   ? const Icon(
                                       Icons.visibility,
                                       size: 30,
@@ -239,8 +163,8 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
                         height: 14,
                       ),
                       TextFormField(
-                        controller: cnfPasswordController,
-                        obscureText: !_isField2Visible,
+                        controller:signupProvider.cnfPasswordController,
+                        obscureText: signupProvider.isField2Visible,
                         cursorColor: Colors.white,
                         style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
@@ -249,9 +173,9 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
                             hintText: 'Re-Enter Password',
                             suffixIcon: GestureDetector(
                                 onTap: () {
-                                  _toggleVisibility(2);
+                                signupProvider.toggleVisibility(2);
                                 },
-                                child: _isField2Visible
+                                child: signupProvider.isField2Visible
                                     ? const Icon(
                                         Icons.visibility,
                                         size: 30,
@@ -295,15 +219,11 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
               ),
               RoundButton(
                 title: 'SignUp',
-                loading: loading,
+                loading:signupProvider.loading,
                 onTap: () {
-                  if (_formKey.currentState!.validate()) {
-                    signUpApi();
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) => ProfileSetupScreen(),
-                    //     ));
+                  if (signupProvider.formKey.currentState!.validate()) {
+                  signupProvider.signUpApi(context);
+                   
                   }
                 },
               ),
@@ -333,7 +253,7 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
                 height: 25,
               ),
               Center(
-                child: Container(
+                child: SizedBox(
                   height: 65,
                   width: 65,
                   child: Image.asset(

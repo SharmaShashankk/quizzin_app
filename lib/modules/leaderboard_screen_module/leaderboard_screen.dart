@@ -69,7 +69,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
         ),
         body: SingleChildScrollView(
           child: arrList.isEmpty
-              ? Center(
+              ? const Center(
                   child: CircularProgressIndicator(),
                 )
               : Column(
@@ -80,7 +80,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                         CircleAvatar(
                             radius: 35,
                             backgroundImage: NetworkImage(arrList[0]['image'])),
-                        Positioned(
+                        const Positioned(
                           top: 50,
                           left: 18,
                           child: CircleAvatar(
@@ -112,7 +112,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                             Image.asset('assets/images/coin 1.png'),
                             Text(
                               arrList[0]['subtitle'].toString(),
-                              style: TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Colors.white),
                             )
                           ],
                         )),
@@ -162,7 +162,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                                           Text(
                                             arrList[1]['subtitle'].toString(),
                                             style:
-                                                TextStyle(color: Colors.white),
+                                                const TextStyle(color: Colors.white),
                                           )
                                         ],
                                       )),
@@ -176,7 +176,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                             Stack(
                               clipBehavior: Clip.none,
                               children: [
-                                CircleAvatar(
+                                const CircleAvatar(
                                     radius: 35,
                                     backgroundImage:
                                         AssetImage('assets/images/Ram.png')),
@@ -214,7 +214,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                                           Text(
                                             arrList[2]['subtitle'].toString(),
                                             style:
-                                                TextStyle(color: Colors.white),
+                                                const TextStyle(color: Colors.white),
                                           )
                                         ],
                                       )),
@@ -257,7 +257,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                                   child: Center(
                                     child: Text(
                                       arrList[index]['rank'].toString(),
-                                      style: TextStyle(color: Colors.white),
+                                      style: const TextStyle(color: Colors.white),
                                     ),
                                   ),
                                 ),
@@ -265,7 +265,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                                   width: 20,
                                 ),
                                 arrList[index]['image'] == null
-                                    ? CircleAvatar(
+                                    ? const CircleAvatar(
                                         radius: 35,
                                         backgroundImage:
                                             AssetImage('assets/images/Ram.png'),

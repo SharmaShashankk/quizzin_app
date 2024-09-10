@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:quizzin_app/services/splash_services.dart';
+import 'package:provider/provider.dart';
+import 'package:quizzin_app/models/provider.dart/splash_provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -9,12 +10,11 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreen2State extends State<SplashScreen> {
-  SplashServices _splashServices = SplashServices();
-
   @override
   void initState() {
     super.initState();
-    _splashServices.isLogin(context);
+    Provider.of<SplashProvider>(context, listen: false)
+        .checkLoginStatus(context);
   }
 
   @override
@@ -28,9 +28,9 @@ class _SplashScreen2State extends State<SplashScreen> {
               children: [
                 Image.asset('assets/images/Design.png'),
                 Padding(
-                  padding: const EdgeInsets.only(top: 25, right: 40, left: 40),
+                  padding: const EdgeInsets.only(top: 45, right: 40, left: 40),
                   child: Container(
-                    height: 70,
+                    height: 60,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.6),
@@ -38,12 +38,15 @@ class _SplashScreen2State extends State<SplashScreen> {
                     ),
                     child: RichText(
                         textAlign: TextAlign.center,
-                        text: const TextSpan(children: [
-                          TextSpan(text: 'An App by\n'),
+                        text: TextSpan(children: [
+                          const TextSpan(
+                              text: 'An App by\n',
+                              style: TextStyle(color: Colors.white)),
                           TextSpan(
                               text: 'Popular Social Media Influencer',
                               style: TextStyle(
-                                  color: Colors.yellow, fontSize: 20)),
+                                  color: Colors.yellowAccent.shade200,
+                                  fontSize: 20)),
                         ])),
                   ),
                 ),
@@ -59,24 +62,34 @@ class _SplashScreen2State extends State<SplashScreen> {
                     child: Image.asset('assets/images/bg.png'),
                   ),
                 ),
-                Positioned(
-                    top: 420,
-                    right: 120,
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: 70,
-                      width: 200,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(1),
-                      ),
-                      child: const Text(
-                        '#manukahat',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xff181632)),
-                      ),
+                const Positioned(
+                    top: 300,
+                    right: 20,
+                    child: Stack(
+                      children: [
+                        Image(
+                          image: AssetImage(
+                            'assets/images/manu_container.png',
+                          ),
+                          height: 300,
+                          width: 400,
+                          fit: BoxFit.cover,
+                        ),
+                        Positioned(
+                          top: 125,
+                          left: 65,
+                          child: SizedBox(
+                            height: 50,
+                            width: 260,
+                            child: FittedBox(
+                              fit: BoxFit.contain,
+                              child: Image(
+                                  image: AssetImage(
+                                      'assets/images/#manukahat-2.png')),
+                            ),
+                          ),
+                        ),
+                      ],
                     )),
                 Positioned(
                   top: 160,
@@ -101,13 +114,13 @@ class _SplashScreen2State extends State<SplashScreen> {
                 ),
                 Positioned(
                     top: 570,
-                    right: 165,
+                    right: 150,
                     child: Image.asset(
-                        height: 90, 'assets/images/Logo Icon - 512.png')),
+                        height: 130, 'assets/images/Logo Icon - 512.png')),
                 Positioned(
-                    top: 600, child: Image.asset('assets/images/Text.png')),
+                    top: 640, child: Image.asset('assets/images/Text.png')),
                 Positioned(
-                    top: 820,
+                    top: 830,
                     right: 40,
                     child: Image.asset('assets/images/Group 257.png'))
               ],

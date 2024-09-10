@@ -1,5 +1,7 @@
-import 'dart:developer';
 // import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,6 +24,8 @@ class MyProfileScreen extends StatefulWidget {
 
 class _MyProfileScreenState extends State<MyProfileScreen> {
   // final auth = FirebaseAuth.instance;
+  // final GoogleSignIn googleSignIn = GoogleSignIn();
+
   XFile? _imageFile;
   getFromGallery(BuildContext context) async {
     dynamic pickedFile = await ImagePicker().pickImage(
@@ -84,6 +88,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       await SharedPreference.clearedSharedPreferenceData();
 
       clearGlobalData();
+      // googleSignIn.signOut();
+
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -126,6 +132,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       Utils().toastMessage(response['result']['message'][0].toString());
     }
   }
+
+  // Future<void> signOut() async {
+  //   await auth.signOut();
+  //   await googleSignIn.signOut();
+  //   await googleSignIn.disconnect();
+  // }
 
   @override
   void initState() {
